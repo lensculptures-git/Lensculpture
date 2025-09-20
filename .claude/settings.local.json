@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.philpenman.com)",
+      "Bash(start index.html)",
+      "Bash(start corporate.html)",
+      "Bash(start events.html)",
+      "Bash(start products.html)",
+      "Bash(start portraits.html)",
+      "WebFetch(domain:www.anseladams.com)",
+      "WebFetch(domain:www.jimmynelson.com)",
+      "Bash(start about.html)",
+      "Bash(git --version)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

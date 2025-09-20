@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Sumith Shantraj - Lens Sculpture | Professional Photography Bengaluru</title>
+    <meta name="description" content="Meet Sumith Shantraj, the passionate photographer behind Lens Sculpture. Discover his journey, artistic vision, and approach to capturing compelling visual stories in Bengaluru.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="portfolio.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <img src="Dark Blue_Logo.png" alt="Lens Sculpture" class="logo">
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="corporate.html" class="nav-link">Corporate</a></li>
+                <li><a href="events.html" class="nav-link">Events</a></li>
+                <li><a href="portraits.html" class="nav-link">Portraits</a></li>
+                <li><a href="products.html" class="nav-link">Products</a></li>
+                <li><a href="about.html" class="nav-link active">About</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Section -->
+    <section class="about-story-section">
+        <div class="about-story-content">
+            <div class="about-image-container fade-in-left">
+                <img src="Portraits/73491a168039881.6584877bb08c9.jpg" alt="Sumith Shantraj">
+            </div>
+            <div class="about-text-content fade-in-right">
+                <h1>Sumith Shantraj</h1>
+                <h2>Biography</h2>
+
+                <p>Photography found me at a time when I was searching for a way to express what words couldn't capture. What began as a fascination with light and shadow has evolved into a lifelong passion for telling stories through images that matter. My relationship with photography started during my college days in Bengaluru, when I borrowed a friend's camera to document a local cultural festival. That first click—capturing the pure joy on a dancer's face—changed everything.</p>
+
+                <p>I believe that every photograph should tell a story—not just document an event, but capture the essence of a moment. Whether I'm photographing a CEO's portrait or a wedding celebration, I'm always looking for that authentic connection, that genuine expression that reveals character. My approach is rooted in patience and observation, where professionalism meets authenticity and technical skill serves emotional truth.</p>
+
+                <p>Over the years, I've had the privilege of working with incredible clients across Bengaluru and beyond. Each project has taught me something new about human nature, about light, about storytelling. I've learned that the best photographs emerge from genuine collaboration—when I understand not just what my clients need, but why it matters to them.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Tell Your Story?</h2>
+            <p>Let's discuss how we can bring your vision to life through professional photography that makes a lasting impact.</p>
+            <a href="contact.html" class="cta-button">Start Our Conversation</a>
+        </div>
+    </section>
+
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <span class="lightbox-close">&times;</span>
+            <img src="" alt="" class="lightbox-image">
+            <div class="lightbox-nav">
+                <button class="lightbox-prev">&#8249;</button>
+                <button class="lightbox-next">&#8250;</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Lens Sculpture. All rights reserved. | Professional Photography Services out of Bengaluru, Karnataka</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="portfolio.js"></script>
+    <script>
+        // Force animation trigger on page load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const fadeElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right');
+                fadeElements.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        el.classList.add('animate');
+                    }
+                });
+            }, 100);
+        });
+    </script>
+</body>
+</html>

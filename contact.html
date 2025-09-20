@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Lens Sculpture | Professional Photography Bengaluru</title>
+    <meta name="description" content="Get in touch with Lens Sculpture for professional photography services in Bengaluru. Corporate, events, portraits, and product photography.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="portfolio.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <img src="Dark Blue_Logo.png" alt="Lens Sculpture" class="logo">
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="corporate.html" class="nav-link">Corporate</a></li>
+                <li><a href="events.html" class="nav-link">Events</a></li>
+                <li><a href="portraits.html" class="nav-link">Portraits</a></li>
+                <li><a href="products.html" class="nav-link">Products</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="contact.html" class="nav-link active">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contact Section -->
+    <section class="contact-main">
+        <div class="container">
+            <div class="contact-wrapper">
+                <!-- Contact Header -->
+                <div class="contact-header">
+                    <h1>Let's Create Something Amazing</h1>
+                    <p>Ready to capture your vision? Get in touch and let's discuss your project.</p>
+                </div>
+
+                <!-- Contact Content -->
+                <div class="contact-content">
+                    <!-- Contact Form -->
+                    <div class="contact-form-section">
+                        <form class="contact-form" id="contact-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" id="name" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" name="email" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="phone">Phone</label>
+                                    <input type="tel" id="phone" name="phone">
+                                </div>
+                                <div class="form-group">
+                                    <label for="service">Service Interest</label>
+                                    <select id="service" name="service">
+                                        <option value="">Select service</option>
+                                        <option value="corporate">Corporate</option>
+                                        <option value="events">Events</option>
+                                        <option value="portraits">Portraits</option>
+                                        <option value="products">Products</option>
+                                        <option value="multiple">Multiple Services</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message">Project Details</label>
+                                <textarea id="message" name="message" rows="5" placeholder="Tell us about your project, timeline, and any specific requirements..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="cta-button">Send Message</button>
+                        </form>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="contact-info-section">
+                        <div class="contact-info">
+                            <h3>Get In Touch</h3>
+
+                            <div class="info-item">
+                                <h4>Email</h4>
+                                <p><a href="mailto:contact@lenssculpture.com">contact@lenssculpture.com</a></p>
+                            </div>
+
+                            <div class="info-item">
+                                <h4>Based in</h4>
+                                <p>Out of Bengaluru, Karnataka</p>
+                            </div>
+
+                            <div class="info-item">
+                                <h4>Services</h4>
+                                <p>Corporate • Events • Portraits • Products</p>
+                            </div>
+
+                            <div class="info-item">
+                                <h4>Response Time</h4>
+                                <p>Within 24 hours</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Lens Sculpture. All rights reserved. | Professional Photography Services out of Bengaluru, Karnataka</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="portfolio.js"></script>
+    <script>
+        // Contact form handling
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get form data
+            const formData = new FormData(this);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const message = formData.get('message');
+
+            // Simple form validation
+            if (!name || !email || !message) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // Show success message (in a real implementation, this would send to a server)
+            alert('Thank you for your message! We\'ll get back to you within 24 hours.');
+
+            // Reset form
+            this.reset();
+        });
+    </script>
+</body>
+</html>
