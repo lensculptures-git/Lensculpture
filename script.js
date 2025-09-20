@@ -321,15 +321,20 @@ function updateSliderDisplay() {
 
 // Optimize positioning for portrait photos to show faces better
 function optimizePortraitPositioning() {
-    // Known portrait images that should use face-focus positioning
-    const portraitIndices = [0, 1, 3, 4, 6, 16, 17, 18, 19, 20]; // Indices of portrait/face photos
-
+    // All slides now have responsive images, apply appropriate positioning
     heroSlides.forEach((slide, index) => {
-        const heroImage = slide.querySelector('.hero-image');
+        // Apply appropriate positioning based on device type
+        const desktopImage = slide.querySelector('.hero-image.desktop-image');
+        const mobileImage = slide.querySelector('.hero-image.mobile-image');
 
-        // Apply face-focus class to portrait photos for better face visibility
-        if (portraitIndices.includes(index)) {
-            heroImage.classList.add('face-focus');
+        // Desktop images get landscape-optimized positioning
+        if (desktopImage) {
+            desktopImage.classList.add('center-focus');
+        }
+
+        // Mobile images get portrait-optimized positioning
+        if (mobileImage) {
+            mobileImage.classList.add('face-focus');
         }
     });
 }
