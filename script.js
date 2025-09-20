@@ -133,44 +133,113 @@ function initializeCircularGallery() {
 
     let currentRotation = 0;
     let isAnimating = true;
+    let isMobile = window.innerWidth <= 768;
 
-    // Pause animation on hover
+    // Check if we're on mobile/touch device
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
     galleryItems.forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            galleryRing.classList.add('paused');
-            animatedRing.classList.add('ring-highlight');
-            isAnimating = false;
+        // Desktop interactions (hover effects) - only if not mobile
+        if (!isMobile && !isTouchDevice) {
+            item.addEventListener('mouseenter', () => {
+                if (galleryRing) galleryRing.classList.add('paused');
+                if (animatedRing) animatedRing.classList.add('ring-highlight');
+                isAnimating = false;
 
-            // Update center content
-            const category = item.dataset.category;
-            const categoryTitle = item.querySelector('h4').textContent;
-            centerText.innerHTML = `
-                <h3 class="gallery-category">${categoryTitle}</h3>
-                <p class="gallery-description">Click to explore</p>
-            `;
-        });
+                // Update center content
+                const category = item.dataset.category;
+                const categoryTitle = item.querySelector('h4').textContent;
+                if (centerText) {
+                    centerText.innerHTML = `
+                        <h3 class="gallery-category">${categoryTitle}</h3>
+                        <p class="gallery-description">Click to explore</p>
+                    `;
+                }
+            });
 
-        item.addEventListener('mouseleave', () => {
-            galleryRing.classList.remove('paused');
-            animatedRing.classList.remove('ring-highlight');
-            isAnimating = true;
+            item.addEventListener('mouseleave', () => {
+                if (galleryRing) galleryRing.classList.remove('paused');
+                if (animatedRing) animatedRing.classList.remove('ring-highlight');
+                isAnimating = true;
 
-            // Reset center content
-            centerText.innerHTML = `
-                <h3 class="gallery-category">Our Work</h3>
-                <p class="gallery-description">Click any category</p>
-            `;
-        });
+                // Reset center content
+                if (centerText) {
+                    centerText.innerHTML = `
+                        <h3 class="gallery-category">Our Work</h3>
+                        <p class="gallery-description">Click any category</p>
+                    `;
+                }
+            });
+        }
 
-        item.addEventListener('click', () => {
+        // Touch-friendly interactions for mobile
+        if (isMobile || isTouchDevice) {
+            // Add touch ripple effect
+            item.addEventListener('touchstart', (e) => {
+                createTouchRipple(e, item);
+                // Visual feedback for touch
+                item.style.transform = 'translateY(-4px) scale(1.02)';
+                item.style.background = 'rgba(255, 255, 255, 0.08)';
+            });
+
+            item.addEventListener('touchend', () => {
+                setTimeout(() => {
+                    item.style.transform = '';
+                    item.style.background = '';
+                }, 150);
+            });
+        }
+
+        // Click/tap navigation (works for both desktop and mobile)
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
             const link = item.dataset.link;
             if (link) {
-                window.location.href = link;
+                // Add a small delay for visual feedback on mobile
+                if (isMobile || isTouchDevice) {
+                    setTimeout(() => {
+                        window.location.href = link;
+                    }, 100);
+                } else {
+                    window.location.href = link;
+                }
             }
         });
     });
 
+    // Handle window resize to update mobile detection
+    window.addEventListener('resize', () => {
+        isMobile = window.innerWidth <= 768;
+    });
+}
 
+// Create touch ripple effect for mobile interactions
+function createTouchRipple(event, element) {
+    const ripple = document.createElement('div');
+    const rect = element.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = event.touches[0].clientX - rect.left - size / 2;
+    const y = event.touches[0].clientY - rect.top - size / 2;
+
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    ripple.style.position = 'absolute';
+    ripple.style.borderRadius = '50%';
+    ripple.style.background = 'rgba(255, 255, 255, 0.3)';
+    ripple.style.pointerEvents = 'none';
+    ripple.style.animation = 'ripple-effect 0.6s ease-out';
+    ripple.style.zIndex = '10';
+
+    element.style.position = 'relative';
+    element.style.overflow = 'hidden';
+    element.appendChild(ripple);
+
+    setTimeout(() => {
+        if (ripple.parentNode) {
+            ripple.parentNode.removeChild(ripple);
+        }
+    }, 600);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
