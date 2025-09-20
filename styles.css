@@ -1525,6 +1525,27 @@ body {
     font-size: 0.9rem;
 }
 
+.made-by {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #999;
+    opacity: 0.8;
+}
+
+.made-by a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    opacity: 0.9;
+}
+
+.made-by a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+    opacity: 1;
+}
+
 /* Animations */
 @keyframes fadeInUp {
     from {
@@ -1556,18 +1577,44 @@ body {
         top: 70px;
         flex-direction: column;
         background-color: rgba(10, 10, 10, 0.98);
+        backdrop-filter: blur(20px);
         width: 100%;
+        height: calc(100vh - 70px);
         text-align: center;
-        transition: 0.3s;
-        padding: 2rem 0;
+        transition: left 0.3s ease-in-out;
+        padding: 3rem 0;
+        z-index: 999;
+        overflow-y: auto;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     .nav-menu.active {
         left: 0;
     }
 
+    .nav-menu li {
+        margin: 1.5rem 0;
+    }
+
+    .nav-link {
+        font-size: 1.3rem;
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        display: block;
+        width: fit-content;
+        margin: 0 auto;
+    }
+
+    .nav-link:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateX(10px);
+    }
+
     .hamburger {
         display: flex;
+        z-index: 1001;
+        position: relative;
     }
 
     .hamburger.active span:nth-child(2) {
