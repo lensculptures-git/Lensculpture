@@ -16,10 +16,57 @@ body {
     overflow-x: hidden;
 }
 
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+        line-height: 1.5;
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 13px;
+        line-height: 1.4;
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* Touch improvements */
+@media (max-width: 768px) {
+    button, .nav-link, .thumbnail {
+        min-height: 44px;
+        min-width: 44px;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-link {
+        padding: 12px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 10px;
+    }
 }
 
 /* Navigation */
@@ -43,10 +90,29 @@ body {
     height: 80px;
 }
 
+@media (max-width: 768px) {
+    .nav-container {
+        padding: 1rem 1.5rem;
+        height: 70px;
+    }
+}
+
 .logo {
     height: 110px;
     width: auto;
     filter: brightness(0) invert(1);
+}
+
+@media (max-width: 768px) {
+    .logo {
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        height: 60px;
+    }
 }
 
 .nav-menu {
@@ -102,6 +168,20 @@ body {
     height: 100vh;
     position: relative;
     overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        height: 100vh;
+        min-height: 600px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section {
+        height: 100vh;
+        min-height: 500px;
+    }
 }
 
 /* Scroll Indicator */
