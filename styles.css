@@ -1360,7 +1360,7 @@ body {
 
 .item-info::after {
     content: 'Click to View';
-    display: block;
+    display: none; /* Hide on desktop by default */
     color: rgba(255, 255, 255, 0.9);
     font-size: 0.75rem;
     text-align: center;
@@ -1529,7 +1529,7 @@ body {
 
     .item-info::after {
         content: 'Tap to View';
-        display: block;
+        display: block; /* Show on mobile */
         color: rgba(255, 255, 255, 0.9);
         font-size: 0.75rem;
         text-align: center;
