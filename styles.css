@@ -1301,7 +1301,25 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 30%; /* Better positioning to show subjects */
     transition: transform 0.4s ease;
+}
+
+/* Specific positioning for different types of images */
+.gallery-item[data-category="corporate"] img {
+    object-position: center 25%; /* Show more of the corporate subjects */
+}
+
+.gallery-item[data-category="portraits"] img {
+    object-position: center 35%; /* Better for portrait compositions */
+}
+
+.gallery-item[data-category="events"] img {
+    object-position: center 40%; /* Good for event shots */
+}
+
+.gallery-item[data-category="products"] img {
+    object-position: center center; /* Center products */
 }
 
 /* Desktop hover effects - only apply on devices with hover capability */
@@ -1379,35 +1397,37 @@ body {
     font-weight: 300;
 }
 
-/* Position items in circle - 4 items at 90 degree intervals */
-.gallery-item:nth-child(1) {
-    top: 50%;
-    left: 100%;
-    transform: translate(-50%, -50%);
-    animation: counterRotate 40s linear infinite;
-}
-.gallery-item:nth-child(2) {
-    top: 0%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: counterRotate 40s linear infinite;
-}
-.gallery-item:nth-child(3) {
-    top: 50%;
-    left: 0%;
-    transform: translate(-50%, -50%);
-    animation: counterRotate 40s linear infinite;
-}
-.gallery-item:nth-child(4) {
-    top: 100%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: counterRotate 40s linear infinite;
-}
+/* Position items in circle - 4 items at 90 degree intervals - Desktop only */
+@media (min-width: 769px) {
+    .gallery-item:nth-child(1) {
+        top: 50%;
+        left: 100%;
+        transform: translate(-50%, -50%);
+        animation: counterRotate 40s linear infinite;
+    }
+    .gallery-item:nth-child(2) {
+        top: 0%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: counterRotate 40s linear infinite;
+    }
+    .gallery-item:nth-child(3) {
+        top: 50%;
+        left: 0%;
+        transform: translate(-50%, -50%);
+        animation: counterRotate 40s linear infinite;
+    }
+    .gallery-item:nth-child(4) {
+        top: 100%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: counterRotate 40s linear infinite;
+    }
 
-@keyframes counterRotate {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(-360deg); }
+    @keyframes counterRotate {
+        from { transform: translate(-50%, -50%) rotate(0deg); }
+        to { transform: translate(-50%, -50%) rotate(-360deg); }
+    }
 }
 
 .gallery-ring.paused .gallery-item {
