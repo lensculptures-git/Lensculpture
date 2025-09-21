@@ -190,17 +190,32 @@ function initializeCircularGallery() {
             });
         }
 
-        // Click/tap navigation (works for both desktop and mobile)
+        // Click/tap navigation with mobile overlay functionality
         item.addEventListener('click', (e) => {
             e.preventDefault();
             const link = item.dataset.link;
-            if (link) {
-                // Add a small delay for visual feedback on mobile
-                if (isMobile || isTouchDevice) {
-                    setTimeout(() => {
+
+            if (isMobile || isTouchDevice) {
+                // Mobile tap-to-reveal overlay interaction
+                if (item.classList.contains('overlay-active')) {
+                    // Second tap - navigate to page
+                    if (link) {
                         window.location.href = link;
-                    }, 100);
+                    }
                 } else {
+                    // First tap - show overlay
+                    // Hide other overlays
+                    galleryItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('overlay-active');
+                        }
+                    });
+                    // Show this overlay
+                    item.classList.add('overlay-active');
+                }
+            } else {
+                // Desktop - direct navigation
+                if (link) {
                     window.location.href = link;
                 }
             }
