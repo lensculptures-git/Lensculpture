@@ -1221,8 +1221,9 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    z-index: 15;
+    z-index: 5;
     animation: textFloat 4s ease-in-out infinite;
+    pointer-events: none;
 }
 
 @keyframes textFloat {
@@ -1285,7 +1286,6 @@ body {
     border: 3px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 255, 255, 0.1);
     animation: subtlePulse 3s ease-in-out infinite;
-    z-index: 10;
 }
 
 @keyframes subtlePulse {
@@ -1297,40 +1297,29 @@ body {
     }
 }
 
-/* Desktop image positioning - only apply on desktop to prevent mobile override */
-@media (min-width: 769px) {
-    .gallery-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center 30%; /* Better positioning to show subjects */
-        transition: transform 0.4s ease;
-    }
-
-    /* Specific positioning for different types of images */
-    .gallery-item[data-category="corporate"] img {
-        object-position: center 25%; /* Show more of the corporate subjects */
-    }
-
-    .gallery-item[data-category="portraits"] img {
-        object-position: center 35%; /* Better for portrait compositions */
-    }
-
-    .gallery-item[data-category="events"] img {
-        object-position: center 40%; /* Good for event shots */
-    }
-
-    .gallery-item[data-category="products"] img {
-        object-position: center center; /* Center products */
-    }
-}
-
-/* Base image styles for all devices */
 .gallery-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 30% !important;
     transition: transform 0.4s ease;
+}
+
+/* Specific positioning for different categories */
+.gallery-item[data-category="corporate"] img {
+    object-position: 45% 35% !important;
+}
+
+.gallery-item[data-category="portraits"] img {
+    object-position: center 25% !important;
+}
+
+.gallery-item[data-category="events"] img {
+    object-position: center 30% !important;
+}
+
+.gallery-item[data-category="products"] img {
+    object-position: center 45% !important;
 }
 
 /* Desktop hover effects - only apply on devices with hover capability */
@@ -1348,19 +1337,7 @@ body {
     }
 }
 
-.gallery-item::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
+/* Removed gallery-item::before overlay that was causing image cutoff */
 
 .item-info {
     position: absolute;
@@ -1375,9 +1352,7 @@ body {
 
 /* Desktop hover effects - only apply on devices with hover capability */
 @media (hover: hover) {
-    .gallery-item:hover::before {
-        opacity: 1;
-    }
+    /* Removed hover effect for ::before overlay */
 
     .gallery-item:hover .item-info {
         transform: translateY(0);
@@ -1443,6 +1418,39 @@ body {
 
 .gallery-ring.paused .gallery-item {
     animation-play-state: paused;
+}
+
+/* Height-responsive gallery adjustments for desktop */
+@media (max-height: 800px) and (min-width: 769px) {
+    .circular-gallery {
+        height: 520px;
+    }
+
+    .gallery-ring {
+        width: 500px;
+        height: 500px;
+    }
+
+    .gallery-item {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+@media (max-height: 700px) and (min-width: 769px) {
+    .circular-gallery {
+        height: 480px;
+    }
+
+    .gallery-ring {
+        width: 450px;
+        height: 450px;
+    }
+
+    .gallery-item {
+        width: 130px;
+        height: 130px;
+    }
 }
 
 
@@ -1599,8 +1607,9 @@ body {
         position: static;
         transform: none;
         margin-bottom: 1rem;
-        z-index: 20;
+        z-index: 5;
         animation: none;
+        pointer-events: auto;
     }
 
     .gallery-category {
