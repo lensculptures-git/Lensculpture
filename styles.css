@@ -1297,29 +1297,40 @@ body {
     }
 }
 
+/* Desktop image positioning - only apply on desktop to prevent mobile override */
+@media (min-width: 769px) {
+    .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 30%; /* Better positioning to show subjects */
+        transition: transform 0.4s ease;
+    }
+
+    /* Specific positioning for different types of images */
+    .gallery-item[data-category="corporate"] img {
+        object-position: center 25%; /* Show more of the corporate subjects */
+    }
+
+    .gallery-item[data-category="portraits"] img {
+        object-position: center 35%; /* Better for portrait compositions */
+    }
+
+    .gallery-item[data-category="events"] img {
+        object-position: center 40%; /* Good for event shots */
+    }
+
+    .gallery-item[data-category="products"] img {
+        object-position: center center; /* Center products */
+    }
+}
+
+/* Base image styles for all devices */
 .gallery-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 30%; /* Better positioning to show subjects */
     transition: transform 0.4s ease;
-}
-
-/* Specific positioning for different types of images */
-.gallery-item[data-category="corporate"] img {
-    object-position: center 25%; /* Show more of the corporate subjects */
-}
-
-.gallery-item[data-category="portraits"] img {
-    object-position: center 35%; /* Better for portrait compositions */
-}
-
-.gallery-item[data-category="events"] img {
-    object-position: center 40%; /* Good for event shots */
-}
-
-.gallery-item[data-category="products"] img {
-    object-position: center center; /* Center products */
 }
 
 /* Desktop hover effects - only apply on devices with hover capability */
