@@ -859,7 +859,7 @@ body {
 .circular-gallery {
     position: relative;
     width: 100%;
-    height: 700px;
+    height: 800px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1259,8 +1259,8 @@ body {
 
 .gallery-ring {
     position: relative;
-    width: 550px;
-    height: 550px;
+    width: 500px;
+    height: 500px;
     animation: rotateRing 40s linear infinite;
 }
 
@@ -1372,24 +1372,24 @@ body {
 /* Position items in circle - 4 items at 90 degree intervals */
 .gallery-item:nth-child(1) {
     top: 50%;
-    left: 85%;
+    left: 75%;
     transform: translate(-50%, -50%);
     animation: counterRotate 40s linear infinite;
 }
 .gallery-item:nth-child(2) {
-    top: 15%;
+    top: 25%;
     left: 50%;
     transform: translate(-50%, -50%);
     animation: counterRotate 40s linear infinite;
 }
 .gallery-item:nth-child(3) {
     top: 50%;
-    left: 15%;
+    left: 25%;
     transform: translate(-50%, -50%);
     animation: counterRotate 40s linear infinite;
 }
 .gallery-item:nth-child(4) {
-    top: 85%;
+    top: 75%;
     left: 50%;
     transform: translate(-50%, -50%);
     animation: counterRotate 40s linear infinite;

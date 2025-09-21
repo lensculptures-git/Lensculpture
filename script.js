@@ -172,21 +172,11 @@ function initializeCircularGallery() {
             });
         }
 
-        // Touch-friendly interactions for mobile
+        // Touch-friendly interactions for mobile (removed problematic transforms)
         if (isMobile || isTouchDevice) {
-            // Add touch ripple effect
+            // Simple touch feedback without position changes
             item.addEventListener('touchstart', (e) => {
                 createTouchRipple(e, item);
-                // Visual feedback for touch
-                item.style.transform = 'translateY(-4px) scale(1.02)';
-                item.style.background = 'rgba(255, 255, 255, 0.08)';
-            });
-
-            item.addEventListener('touchend', () => {
-                setTimeout(() => {
-                    item.style.transform = '';
-                    item.style.background = '';
-                }, 150);
             });
         }
 
