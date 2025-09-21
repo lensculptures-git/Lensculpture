@@ -1304,16 +1304,19 @@ body {
     transition: transform 0.4s ease;
 }
 
-.gallery-item:hover {
-    transform: scale(1.15) translateY(-5px);
-    border-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 60px rgba(255, 255, 255, 0.3);
-    z-index: 20;
-    animation: none;
-}
+/* Desktop hover effects - only apply on devices with hover capability */
+@media (hover: hover) {
+    .gallery-item:hover {
+        transform: scale(1.15) translateY(-5px);
+        border-color: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 60px rgba(255, 255, 255, 0.3);
+        z-index: 20;
+        animation: none;
+    }
 
-.gallery-item:hover img {
-    transform: scale(1.1);
+    .gallery-item:hover img {
+        transform: scale(1.1);
+    }
 }
 
 .gallery-item::before {
@@ -1330,10 +1333,6 @@ body {
     pointer-events: none;
 }
 
-.gallery-item:hover::before {
-    opacity: 1;
-}
-
 .item-info {
     position: absolute;
     bottom: 0;
@@ -1345,8 +1344,15 @@ body {
     transition: transform 0.3s ease;
 }
 
-.gallery-item:hover .item-info {
-    transform: translateY(0);
+/* Desktop hover effects - only apply on devices with hover capability */
+@media (hover: hover) {
+    .gallery-item:hover::before {
+        opacity: 1;
+    }
+
+    .gallery-item:hover .item-info {
+        transform: translateY(0);
+    }
 }
 
 .item-info h4 {
@@ -1469,11 +1475,14 @@ body {
         overflow: hidden;
     }
 
-    .gallery-item:hover {
-        transform: translateY(-8px) scale(1.02) !important;
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.2);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    /* Remove hover effects for touch devices to prevent unwanted movement */
+    @media (hover: hover) {
+        .gallery-item:hover {
+            transform: translateY(-8px) scale(1.02) !important;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
     }
 
     .item-image {
@@ -1546,6 +1555,13 @@ body {
         border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: 20px;
         background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Update the "Tap to View" text when overlay is active */
+    .gallery-item.overlay-active .item-info::after {
+        content: 'Tap Again to Enter';
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.5);
     }
 
     .center-text {
