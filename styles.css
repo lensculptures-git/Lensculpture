@@ -1353,9 +1353,13 @@ body {
     color: white;
     font-size: 1rem;
     font-weight: 400;
-    margin: 0 0 0.5rem 0;
+    margin: 0;
     text-align: center;
     letter-spacing: 0.5px;
+}
+
+.item-info p {
+    display: none; /* Hide description on desktop */
 }
 
 .item-info::after {
@@ -1521,6 +1525,7 @@ body {
     }
 
     .item-info p {
+        display: block; /* Show description on mobile */
         font-size: 0.85rem;
         color: rgba(255, 255, 255, 0.7);
         margin: 0;
