@@ -1301,25 +1301,18 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 30% !important;
     transition: transform 0.4s ease;
 }
 
 /* Specific positioning for different categories */
-.gallery-item[data-category="corporate"] img {
-    object-position: 45% 35% !important;
-}
 
 .gallery-item[data-category="portraits"] img {
-    object-position: center 25% !important;
 }
 
 .gallery-item[data-category="events"] img {
-    object-position: center 30% !important;
 }
 
 .gallery-item[data-category="products"] img {
-    object-position: center 45% !important;
 }
 
 /* Desktop hover effects - only apply on devices with hover capability */
