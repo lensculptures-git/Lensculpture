@@ -103,6 +103,10 @@ body {
         padding: 1rem 1.5rem;
         height: 70px;
     }
+
+    .nav-logo {
+        margin-left: -30px;
+    }
 }
 
 .logo {
