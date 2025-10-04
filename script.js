@@ -381,14 +381,6 @@ function pauseAutoplay() {
 
 // Navigation functionality
 function initializeNavigation() {
-    // Create backdrop element on page load
-    if (!document.querySelector('.menu-backdrop')) {
-        const backdrop = document.createElement('div');
-        backdrop.className = 'menu-backdrop';
-        backdrop.addEventListener('click', toggleMobileMenu);
-        document.body.appendChild(backdrop);
-    }
-
     if (hamburger) {
         hamburger.addEventListener('click', toggleMobileMenu);
     }
@@ -431,14 +423,8 @@ function initializeNavigation() {
 }
 
 function toggleMobileMenu() {
-    const backdrop = document.querySelector('.menu-backdrop');
-
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
-
-    if (backdrop) {
-        backdrop.classList.toggle('active');
-    }
 
     // Prevent body scroll when menu is open
     if (navMenu.classList.contains('active')) {
