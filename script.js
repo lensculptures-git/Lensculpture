@@ -110,7 +110,7 @@ function initializeScrollIndicator() {
             scrolled = false;
             scrollIndicator.classList.remove('hide');
         }
-    });
+    }, { passive: true });
 
     // Smooth scroll on click
     scrollIndicator.addEventListener('click', () => {
@@ -124,133 +124,45 @@ function initializeScrollIndicator() {
     });
 }
 
-// Circular Gallery Functionality
-function initializeCircularGallery() {
-    const galleryRing = document.querySelector('.gallery-ring');
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    const centerText = document.querySelector('.center-text');
-    const animatedRing = document.querySelector('.animated-ring');
+// Services Grid Functionality
+function initializeServicesGrid() {
+    const serviceCards = document.querySelectorAll('.service-card');
 
-    let currentRotation = 0;
-    let isAnimating = true;
-    let isMobile = window.innerWidth <= 768;
+    if (!serviceCards || serviceCards.length === 0) {
+        return;
+    }
 
-    // Check if we're on mobile/touch device
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    // Add scroll animation observer
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
 
-    galleryItems.forEach(item => {
-        // Desktop interactions (hover effects) - only if not mobile
-        if (!isMobile && !isTouchDevice) {
-            item.addEventListener('mouseenter', () => {
-                if (galleryRing) galleryRing.classList.add('paused');
-                if (animatedRing) animatedRing.classList.add('ring-highlight');
-                isAnimating = false;
-
-                // Update center content
-                const category = item.dataset.category;
-                const categoryTitle = item.querySelector('h4').textContent;
-                if (centerText) {
-                    centerText.innerHTML = `
-                        <h3 class="gallery-category">${categoryTitle}</h3>
-                        <p class="gallery-description">Click to explore</p>
-                    `;
-                }
-            });
-
-            item.addEventListener('mouseleave', () => {
-                if (galleryRing) galleryRing.classList.remove('paused');
-                if (animatedRing) animatedRing.classList.remove('ring-highlight');
-                isAnimating = true;
-
-                // Reset center content
-                if (centerText) {
-                    centerText.innerHTML = `
-                        <h3 class="gallery-category">Our Work</h3>
-                        <p class="gallery-description">Click any category</p>
-                    `;
-                }
-            });
-        }
-
-        // Touch-friendly interactions for mobile (removed problematic transforms)
-        if (isMobile || isTouchDevice) {
-            // Simple touch feedback without position changes
-            item.addEventListener('touchstart', (e) => {
-                createTouchRipple(e, item);
-            });
-        }
-
-        // Click/tap navigation with mobile overlay functionality
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            const link = item.dataset.link;
-
-            if (isMobile || isTouchDevice) {
-                // Mobile tap-to-reveal overlay interaction
-                if (item.classList.contains('overlay-active')) {
-                    // Second tap - navigate to page
-                    if (link) {
-                        window.location.href = link;
-                    }
-                } else {
-                    // First tap - show overlay
-                    // Hide other overlays
-                    galleryItems.forEach(otherItem => {
-                        if (otherItem !== item) {
-                            otherItem.classList.remove('overlay-active');
-                        }
-                    });
-                    // Show this overlay
-                    item.classList.add('overlay-active');
-                }
-            } else {
-                // Desktop - direct navigation
-                if (link) {
-                    window.location.href = link;
-                }
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                // Stagger animation for cards
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 100);
             }
         });
+    }, observerOptions);
+
+    // Initial state and observe
+    serviceCards.forEach((card) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
     });
-
-    // Handle window resize to update mobile detection
-    window.addEventListener('resize', () => {
-        isMobile = window.innerWidth <= 768;
-    });
-}
-
-// Create touch ripple effect for mobile interactions
-function createTouchRipple(event, element) {
-    const ripple = document.createElement('div');
-    const rect = element.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height);
-    const x = event.touches[0].clientX - rect.left - size / 2;
-    const y = event.touches[0].clientY - rect.top - size / 2;
-
-    ripple.style.width = ripple.style.height = size + 'px';
-    ripple.style.left = x + 'px';
-    ripple.style.top = y + 'px';
-    ripple.style.position = 'absolute';
-    ripple.style.borderRadius = '50%';
-    ripple.style.background = 'rgba(255, 255, 255, 0.3)';
-    ripple.style.pointerEvents = 'none';
-    ripple.style.animation = 'ripple-effect 0.6s ease-out';
-    ripple.style.zIndex = '10';
-
-    element.style.position = 'relative';
-    element.style.overflow = 'hidden';
-    element.appendChild(ripple);
-
-    setTimeout(() => {
-        if (ripple.parentNode) {
-            ripple.parentNode.removeChild(ripple);
-        }
-    }, 600);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize circular gallery
-    if (document.querySelector('.circular-gallery')) {
-        initializeCircularGallery();
+    // Initialize services grid
+    if (document.querySelector('.services-grid')) {
+        initializeServicesGrid();
     }
 
     // Initialize scroll indicator
@@ -266,6 +178,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Modern Hero slideshow functionality
 function initializeHeroSlideshow() {
+    // Check if hero slideshow elements exist (only on homepage)
+    if (!heroSlides || heroSlides.length === 0) {
+        return;
+    }
+
     // Optimize positioning for better face visibility
     optimizePortraitPositioning();
 
@@ -302,15 +219,17 @@ function initializeHeroSlideshow() {
 
     // Pause/resume autoplay on hover
     const heroSection = document.querySelector('.hero-section');
-    heroSection.addEventListener('mouseenter', () => {
-        pauseAutoplay();
-    });
+    if (heroSection) {
+        heroSection.addEventListener('mouseenter', () => {
+            pauseAutoplay();
+        });
 
-    heroSection.addEventListener('mouseleave', () => {
-        if (isAutoplay) {
-            startAutoplay();
-        }
-    });
+        heroSection.addEventListener('mouseleave', () => {
+            if (isAutoplay) {
+                startAutoplay();
+            }
+        });
+    }
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
@@ -377,8 +296,12 @@ function goToSlide(index) {
     });
 
     // Add active classes
-    heroSlides[index].classList.add('active');
-    thumbnails[index].classList.add('active');
+    if (heroSlides[index]) {
+        heroSlides[index].classList.add('active');
+    }
+    if (thumbnails[index]) {
+        thumbnails[index].classList.add('active');
+    }
 
     currentSlide = index;
     updateSliderDisplay();
@@ -462,6 +385,9 @@ function initializeNavigation() {
         hamburger.addEventListener('click', toggleMobileMenu);
     }
 
+    // Set active page on load
+    setActivePageLink();
+
     if (navLinks) {
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
@@ -490,12 +416,36 @@ function initializeNavigation() {
     }
 
     // Update active nav link on scroll
-    window.addEventListener('scroll', updateActiveNavLink);
+    window.addEventListener('scroll', updateActiveNavLink, { passive: true });
+
+    // Initialize auto-hide navbar on scroll
+    initializeNavbarAutoHide();
 }
 
 function toggleMobileMenu() {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
+}
+
+function setActivePageLink() {
+    // Get current page filename
+    let currentPage = window.location.pathname.split('/').pop();
+
+    // Default to index.html if no page specified
+    if (currentPage === '' || currentPage === '/') {
+        currentPage = 'index.html';
+    }
+
+    // Remove active class from all links
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+
+        // Check if link href matches current page
+        const linkHref = link.getAttribute('href');
+        if (linkHref === currentPage) {
+            link.classList.add('active');
+        }
+    });
 }
 
 function updateActiveNavLink() {
@@ -515,6 +465,44 @@ function updateActiveNavLink() {
             }
         }
     });
+}
+
+// Auto-hide navbar on scroll
+function initializeNavbarAutoHide() {
+    const navbar = document.querySelector('.navbar');
+    if (!navbar) return;
+
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    function updateNavbar() {
+        const currentScrollY = window.scrollY;
+
+        // Always show navbar at top of page
+        if (currentScrollY < 100) {
+            navbar.classList.remove('hidden');
+        }
+        // Hide when scrolling down
+        else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            navbar.classList.add('hidden');
+        }
+        // Show when scrolling up
+        else if (currentScrollY < lastScrollY) {
+            navbar.classList.remove('hidden');
+        }
+
+        lastScrollY = currentScrollY;
+        ticking = false;
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(updateNavbar);
+            ticking = true;
+        }
+    }
+
+    window.addEventListener('scroll', requestTick, { passive: true });
 }
 
 // Gallery functionality
@@ -702,8 +690,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Parallax effect for hero section
-window.addEventListener('scroll', () => {
+// Parallax effect for hero section (throttled for performance)
+let heroParallaxTicking = false;
+
+function updateHeroParallax() {
     const scrolled = window.pageYOffset;
     const rate = scrolled * -0.5;
 
@@ -713,7 +703,21 @@ window.addEventListener('scroll', () => {
             heroImage.style.transform = `translateY(${rate}px)`;
         }
     });
-});
+
+    heroParallaxTicking = false;
+}
+
+function requestHeroParallaxTick() {
+    if (!heroParallaxTicking) {
+        requestAnimationFrame(updateHeroParallax);
+        heroParallaxTicking = true;
+    }
+}
+
+// Only run hero parallax on index.html
+if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+    window.addEventListener('scroll', requestHeroParallaxTick, { passive: true });
+}
 
 // Preload images for better performance
 function preloadImages() {
@@ -738,39 +742,130 @@ window.addEventListener('load', preloadImages);
 class StarBirthSystem {
     constructor() {
         this.container = document.getElementById('starBirthContainer');
-        this.circularGallery = document.querySelector('.circular-gallery');
+        this.servicesGrid = document.querySelector('.services-grid');
         this.activeStars = [];
-        this.maxStars = 80; // Even more stars for abundant cosmic flow
         this.isRunning = false;
 
-        if (this.container && this.circularGallery) {
+        // Configurable parameters
+        this.config = {
+            maxStars: this.isMobile() ? 50 : 100, // Fewer stars on mobile for performance
+            idleThreshold: 10000, // 10 seconds of inactivity before stars bloom
+            bloomDelay: { min: 60, max: 40 }, // 60-100ms between star generation
+            scatterDuration: 6000, // 6 seconds to scatter when active
+            idleDuration: { min: 40000, max: 20000 }, // 40-60 seconds idle drift
+            bloomRadius: 75, // Radius around cursor for star spawn
+        };
+
+        // Idle detection for star generation
+        this.mouseX = window.innerWidth / 2;
+        this.mouseY = window.innerHeight / 2;
+        this.lastActivityTime = Date.now();
+        this.isCurrentlyIdle = false;
+        this.isPaused = false; // For page visibility
+
+        // Check for reduced motion preference (accessibility)
+        this.respectReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Initialize if container exists and motion is allowed
+        if (this.container && !this.respectReducedMotion) {
             this.init();
+        } else if (this.respectReducedMotion) {
+            console.log('Star system disabled: user prefers reduced motion');
         }
+    }
+
+    isMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+               || window.innerWidth <= 768;
     }
 
     init() {
         this.isRunning = true;
+        this.setupActivityTracking();
+        this.setupPageVisibility();
         this.startStarGeneration();
     }
 
+    setupPageVisibility() {
+        // Pause star generation when tab is hidden to save resources
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                console.log('Tab hidden - pausing star generation');
+                this.isPaused = true;
+            } else {
+                console.log('Tab visible - resuming star generation');
+                this.isPaused = false;
+                // Reset activity time to prevent immediate bloom when returning to tab
+                this.lastActivityTime = Date.now();
+                this.isCurrentlyIdle = false;
+            }
+        });
+    }
+
+    handleActivityDetection() {
+        // Detect idle → active transition and scatter stars
+        if (this.isCurrentlyIdle) {
+            console.log('Transition: Idle → Active - Scattering stars!');
+            this.scatterExistingStars();
+            this.isCurrentlyIdle = false;
+        }
+        this.lastActivityTime = Date.now();
+    }
+
+    updateActivity(x, y) {
+        this.mouseX = x;
+        this.mouseY = y;
+        this.handleActivityDetection();
+    }
+
+    setupActivityTracking() {
+        // Track mouse movement
+        document.addEventListener('mousemove', (e) => {
+            this.updateActivity(e.clientX, e.clientY);
+        });
+
+        // Track scroll activity
+        document.addEventListener('scroll', () => {
+            this.handleActivityDetection();
+        }, { passive: true });
+
+        // Track clicks (gallery navigation, buttons, links, etc.)
+        document.addEventListener('click', () => {
+            this.handleActivityDetection();
+        });
+
+        // Track keyboard interactions (arrow keys, enter, etc.)
+        document.addEventListener('keydown', () => {
+            this.handleActivityDetection();
+        });
+
+        // Track touch movement for mobile
+        document.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                this.updateActivity(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        });
+
+        // Track mobile taps
+        document.addEventListener('touchstart', () => {
+            this.handleActivityDetection();
+        });
+    }
+
     getGalleryBounds() {
-        const rect = this.circularGallery.getBoundingClientRect();
-
-        // Since container is fixed positioned, use direct viewport coordinates
+        // Use current mouse position as the center for star generation
         const bounds = {
-            centerX: rect.left + rect.width / 2,
-            centerY: rect.top + rect.height / 2,
-            radius: Math.min(rect.width, rect.height) / 2 * 0.7 // 70% of gallery radius
+            centerX: this.mouseX,
+            centerY: this.mouseY,
+            radius: this.config.bloomRadius
         };
-
-        console.log('Gallery bounds:', bounds);
         return bounds;
     }
 
     generateRandomSpawnPoint() {
         const bounds = this.getGalleryBounds();
         const angle = Math.random() * Math.PI * 2;
-        const distance = Math.random() * bounds.radius * 0.8; // Within 80% of center area
+        const distance = Math.random() * bounds.radius; // Stars spawn within radius of cursor
 
         return {
             x: bounds.centerX + Math.cos(angle) * distance,
@@ -779,7 +874,7 @@ class StarBirthSystem {
     }
 
     createStar() {
-        if (this.activeStars.length >= this.maxStars) {
+        if (this.activeStars.length >= this.config.maxStars) {
             console.log('Max stars reached, skipping creation');
             return;
         }
@@ -798,10 +893,10 @@ class StarBirthSystem {
         const angle = Math.random() * Math.PI * 2;
         const speed = 0.1 + Math.random() * 0.3; // Much slower, very graceful movement
 
-        // Calculate distance to reach screen edge
+        // Calculate distance to reach screen edge and beyond
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
-        const maxDistance = Math.max(screenWidth, screenHeight) + 200; // Extra buffer to ensure full exit
+        const maxDistance = Math.max(screenWidth, screenHeight) + 1000; // Extended travel distance for longer journeys
         const distance = maxDistance;
 
         // Calculate end position
@@ -829,13 +924,16 @@ class StarBirthSystem {
     }
 
     animateStar(star, start, endX, endY, speed) {
-        const duration = (15 + Math.random() * 10) * 1000; // 15-25 seconds for very slow, contemplative movement
+        const duration = this.config.idleDuration.min + Math.random() * this.config.idleDuration.max; // 40-60 seconds - stars linger longer before drifting away
+
+        // Store movement params for potential scatter
+        star.scatterData = { start, endX, endY };
 
         // Apply birth animation
         star.style.animation = `starBirth ${duration}ms ease-out forwards`;
 
-        // Apply movement
-        star.animate([
+        // Apply movement and store animation reference
+        star.moveAnimation = star.animate([
             { transform: 'translate(0, 0) scale(0)', opacity: 0 },
             { transform: 'translate(0, 0) scale(1.2)', opacity: 1, offset: 0.2 },
             { transform: `translate(${endX - start.x}px, ${endY - start.y}px) scale(0.8)`, opacity: 0 }
@@ -843,7 +941,9 @@ class StarBirthSystem {
             duration: duration,
             easing: 'ease-out',
             fill: 'forwards'
-        }).onfinish = () => {
+        });
+
+        star.moveAnimation.onfinish = () => {
             this.removeStar(star);
         };
 
@@ -865,17 +965,70 @@ class StarBirthSystem {
         }
     }
 
-    startStarGeneration() {
-        console.log('Starting star generation...');
-        const generateStar = () => {
-            if (this.isRunning) {
-                console.log('Attempting to create star...');
-                this.createStar();
+    scatterExistingStars() {
+        // Gracefully scatter stars when user becomes active
+        console.log(`Elegantly scattering ${this.activeStars.length} existing stars`);
 
-                // Random interval between star generation (0.1 to 0.8 seconds for much more frequent generation)
-                const nextDelay = 100 + Math.random() * 700;
-                console.log(`Next star in ${nextDelay}ms`);
-                setTimeout(generateStar, nextDelay);
+        this.activeStars.forEach(star => {
+            if (star.moveAnimation && star.scatterData) {
+                // Cancel current slow animation
+                star.moveAnimation.cancel();
+
+                // Create elegant scatter animation - responsive yet graceful
+                const scatterDuration = this.config.scatterDuration;
+                const { start, endX, endY } = star.scatterData;
+
+                star.moveAnimation = star.animate([
+                    { transform: 'translate(0, 0) scale(1.2)', opacity: 1, offset: 0 },
+                    { transform: `translate(${(endX - start.x) * 0.3}px, ${(endY - start.y) * 0.3}px) scale(1.0)`, opacity: 0.9, offset: 0.5 },
+                    { transform: `translate(${endX - start.x}px, ${endY - start.y}px) scale(0.6)`, opacity: 0, offset: 1 }
+                ], {
+                    duration: scatterDuration,
+                    easing: 'ease-in-out', // Smooth acceleration and deceleration
+                    fill: 'forwards'
+                });
+
+                star.moveAnimation.onfinish = () => {
+                    this.removeStar(star);
+                };
+            }
+        });
+    }
+
+    startStarGeneration() {
+        console.log('Starting star generation with idle detection...');
+        const generateStar = () => {
+            if (this.isRunning && !this.isPaused) {
+                const now = Date.now();
+                const idleTime = now - this.lastActivityTime;
+
+                if (idleTime >= this.config.idleThreshold) {
+                    // User is idle - generate stars (blooming effect)
+                    if (!this.isCurrentlyIdle) {
+                        console.log('Transition: Active → Idle - Starting star bloom');
+                        this.isCurrentlyIdle = true;
+                    }
+
+                    console.log(`Idle for ${idleTime}ms - Creating star`);
+                    this.createStar();
+
+                    // Fast generation while idle for blooming effect
+                    const bloomDelay = this.config.bloomDelay.min + Math.random() * this.config.bloomDelay.max;
+                    setTimeout(generateStar, bloomDelay);
+                } else {
+                    // User is active (moving mouse or scrolling) - skip stars
+                    if (this.isCurrentlyIdle) {
+                        this.isCurrentlyIdle = false;
+                    }
+
+                    console.log(`Active - ${idleTime}ms since last activity, waiting...`);
+
+                    // Check again soon to catch when user becomes idle
+                    setTimeout(generateStar, 100);
+                }
+            } else if (this.isPaused) {
+                // Tab is hidden, check again later
+                setTimeout(generateStar, 1000);
             } else {
                 console.log('Star generation stopped');
             }
@@ -896,15 +1049,13 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         console.log('Initializing Star Birth System...');
         const container = document.getElementById('starBirthContainer');
-        const gallery = document.querySelector('.circular-gallery');
         console.log('Container found:', !!container);
-        console.log('Gallery found:', !!gallery);
 
-        if (container && gallery) {
+        if (container) {
             window.starBirthSystem = new StarBirthSystem();
-            console.log('Star Birth System initialized');
+            console.log('Star Birth System initialized on all pages');
         } else {
-            console.error('Required elements not found for Star Birth System');
+            console.error('Star container not found');
         }
-    }, 2000); // Increased delay to ensure elements are ready
+    }, 1000); // Reduced delay since we don't need to wait for services-grid
 });

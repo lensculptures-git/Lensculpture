@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Claude Code settings
+.claude/settings.local.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Screenshots (temporary testing files)
+Screenshot*.png
+*.png
+
+# RAW files (too large for git)
+*.ARW

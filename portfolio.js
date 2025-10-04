@@ -124,7 +124,7 @@ function initializeParallaxEffects() {
     updateParallax();
 }
 
-// Showcase Gallery Lightbox (for story layout)
+// Showcase Gallery Lightbox
 function initializeShowcaseLightbox() {
     const showcaseItems = document.querySelectorAll('.showcase-item');
     const lightbox = document.getElementById('lightbox');
@@ -132,27 +132,71 @@ function initializeShowcaseLightbox() {
     const lightboxClose = document.querySelector('.lightbox-close');
     const lightboxPrev = document.querySelector('.lightbox-prev');
     const lightboxNext = document.querySelector('.lightbox-next');
+    const lightboxThumbnails = document.getElementById('lightboxThumbnails');
+
+    if (!lightbox || showcaseItems.length === 0) return;
 
     let currentImages = [];
     let currentImageIndex = 0;
 
-    // Get all showcase items
-    function updateShowcaseImages() {
-        currentImages = Array.from(showcaseItems).map(item => {
-            const img = item.querySelector('img');
-            const overlay = item.querySelector('.showcase-overlay span');
-            return {
-                src: img.src,
-                alt: img.alt,
-                title: overlay ? overlay.textContent : ''
-            };
+    // Build images array from showcase items
+    currentImages = Array.from(showcaseItems).map(item => {
+        const img = item.querySelector('img');
+        const overlay = item.querySelector('.showcase-overlay span');
+        return {
+            src: img.src,
+            alt: img.alt,
+            title: overlay ? overlay.textContent : ''
+        };
+    });
+
+    // Generate thumbnails
+    function generateThumbnails() {
+        if (!lightboxThumbnails) return;
+
+        lightboxThumbnails.innerHTML = '';
+        currentImages.forEach((image, index) => {
+            const thumb = document.createElement('div');
+            thumb.className = 'lightbox-thumbnail';
+            if (index === currentImageIndex) {
+                thumb.classList.add('active');
+            }
+
+            const thumbImg = document.createElement('img');
+            thumbImg.src = image.src;
+            thumbImg.alt = image.alt;
+
+            thumb.appendChild(thumbImg);
+            thumb.addEventListener('click', () => {
+                currentImageIndex = index;
+                updateLightboxImage();
+                updateThumbnails();
+            });
+
+            lightboxThumbnails.appendChild(thumb);
         });
     }
 
-    // Open lightbox for showcase items
+    // Update active thumbnail
+    function updateThumbnails() {
+        if (!lightboxThumbnails) return;
+
+        const thumbnails = lightboxThumbnails.querySelectorAll('.lightbox-thumbnail');
+        thumbnails.forEach((thumb, index) => {
+            if (index === currentImageIndex) {
+                thumb.classList.add('active');
+                // Scroll thumbnail into view
+                thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            } else {
+                thumb.classList.remove('active');
+            }
+        });
+    }
+
+    // Open lightbox on showcase item click
     showcaseItems.forEach((item, index) => {
-        item.addEventListener('click', () => {
-            updateShowcaseImages();
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
             currentImageIndex = index;
             openLightbox();
         });
@@ -161,22 +205,15 @@ function initializeShowcaseLightbox() {
     function openLightbox() {
         if (currentImages.length > 0) {
             updateLightboxImage();
+            generateThumbnails();
             lightbox.style.display = 'block';
             document.body.style.overflow = 'hidden';
-
-            // Add fade-in animation
-            setTimeout(() => {
-                lightbox.style.opacity = '1';
-            }, 10);
         }
     }
 
     function closeLightbox() {
-        lightbox.style.opacity = '0';
-        setTimeout(() => {
-            lightbox.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }, 300);
+        lightbox.style.display = 'none';
+        document.body.style.overflow = 'auto';
     }
 
     function updateLightboxImage() {
@@ -185,6 +222,7 @@ function initializeShowcaseLightbox() {
             lightboxImage.src = image.src;
             lightboxImage.alt = image.alt;
         }
+        updateThumbnails();
     }
 
     function showPreviousImage() {

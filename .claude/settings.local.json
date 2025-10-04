@@ -18,7 +18,17 @@
       "Bash(git remote add:*)",
       "Bash(git branch:*)",
       "Bash(git push:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "WebSearch",
+      "WebFetch(domain:reactbits.dev)",
+      "Bash(npm install:*)",
+      "Bash(npm init:*)",
+      "Bash(npm run dev:*)",
+      "Bash(python:*)",
+      "Bash(timeout 2 bash -c \"curl -s -o /dev/null -w ''%{http_code}'' http://localhost:8000/index.html\")",
+      "Bash(grep:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
