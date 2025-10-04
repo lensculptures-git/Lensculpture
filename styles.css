@@ -1550,19 +1550,17 @@ body {
         right: -100%;
         top: 0;
         flex-direction: column;
-        background: rgba(10, 10, 10, 0.98);
-        backdrop-filter: blur(30px);
-        -webkit-backdrop-filter: blur(30px);
-        width: 280px;
-        max-width: 75%;
+        background: #0a0a0a;
+        width: 260px;
+        max-width: 70%;
         height: 100vh;
         text-align: left;
-        transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        padding: 5rem 1.5rem 2rem;
+        transition: right 0.3s ease-out;
+        padding: 5.5rem 0 2rem;
         z-index: 1002;
         overflow-y: auto;
-        box-shadow: -2px 0 20px rgba(0, 0, 0, 0.8);
-        border-left: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: -3px 0 15px rgba(0, 0, 0, 0.9);
+        border-left: 1px solid #1a1a1a;
     }
 
     .nav-menu.active {
@@ -1570,33 +1568,34 @@ body {
     }
 
     .nav-menu li {
-        margin: 0.5rem 0;
+        margin: 0;
+        list-style: none;
     }
 
     .nav-link {
-        font-size: 1.1rem;
+        font-size: 1rem;
         font-weight: 400;
-        padding: 1rem 1.2rem;
-        border-radius: 8px;
-        transition: all 0.25s ease;
+        padding: 0.9rem 1.5rem;
+        transition: all 0.2s ease;
         display: block;
         width: 100%;
         margin: 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid #1a1a1a;
+        color: #d0d0d0;
     }
 
     .nav-link:hover {
-        background: rgba(255, 255, 255, 0.08);
-        padding-left: 1.5rem;
+        background: #1a1a1a;
+        padding-left: 2rem;
         color: #ffffff;
     }
 
     .nav-link.active {
-        background: rgba(255, 255, 255, 0.12);
+        background: #1a1a1a;
         color: #ffffff;
         font-weight: 500;
         border-left: 3px solid #ffffff;
-        padding-left: 1.4rem;
+        padding-left: calc(2rem - 3px);
     }
 
     .hamburger {
@@ -1624,18 +1623,18 @@ body {
         left: 0;
         width: 100%;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.75);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
+        background: rgba(0, 0, 0, 0.85);
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s;
+        transition: opacity 0.3s ease, visibility 0.3s;
         z-index: 1001;
+        pointer-events: none;
     }
 
     .menu-backdrop.active {
         opacity: 1;
         visibility: visible;
+        pointer-events: auto;
     }
 
     .hero-title {
