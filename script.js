@@ -423,6 +423,8 @@ function initializeNavigation() {
 }
 
 function toggleMobileMenu() {
+    if (!hamburger || !navMenu) return;
+
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
 
