@@ -1034,8 +1034,9 @@ body.products-page .story-hero .parallax-bg::before {
         padding: 0 1.5rem 3rem 1.5rem;
     }
 
-    .parallax-bg::before {
-        background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.2) 70%, transparent 100%);
+    /* Remove overlay on mobile for portfolio pages (corporate, events, fashion, products, travel) */
+    .story-hero .parallax-bg::before {
+        background: none;
     }
 
     .parallax-bg {
