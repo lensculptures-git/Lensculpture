@@ -425,7 +425,31 @@ function initializeNavigation() {
 function toggleMobileMenu() {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
+
+    // Toggle backdrop
+    let backdrop = document.querySelector('.menu-backdrop');
+    if (!backdrop) {
+        backdrop = document.createElement('div');
+        backdrop.className = 'menu-backdrop';
+        backdrop.addEventListener('click', toggleMobileMenu);
+        document.body.appendChild(backdrop);
+    }
+    backdrop.classList.toggle('active');
+
+    // Prevent body scroll when menu is open
+    if (navMenu.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = '';
+    }
 }
+
+// Close menu with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navMenu && navMenu.classList.contains('active')) {
+        toggleMobileMenu();
+    }
+});
 
 function setActivePageLink() {
     // Get current page filename
