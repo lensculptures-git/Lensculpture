@@ -1,5 +1,74 @@
 # Lens Sculpture Website - Version History
 
+## Git Configuration
+- **Repository**: https://github.com/lensculptures-git/Lensculpture.git
+- **GitHub Account**: lensculptures-git
+- **Branch**: main
+- **Deployment**: Vercel (auto-deploy on push)
+- **Live URL**: https://lensculpture.com
+
+---
+
+## Version 1.1 - Homepage Hero & Mobile Navigation Redesign (October 5, 2025)
+
+### Homepage Hero Gallery Update
+- **Removed dependency on hero images folder** - Now using images from all website pages
+- **Desktop view (Landscape images)**: 15 slides featuring landscape-oriented images from:
+  - Travel: Image 2.jpeg, Image 19.jpg, Image 15.jpg, Image 29.jpeg
+  - Events: 7ece68158858591.65b81cfb8ed2b.jpg, DSC08383-01.jpeg, Lucky Ali 01.jpg, Lucky Ali 02.jpg, DSC04479.JPG, 09a4f2158858591.65b819d34f501.jpg
+  - Products: 0ba655168039249...jpg, b2449e168039249...jpg, Adobe Lr-017.JPG
+  - Corporate: DSC02272.JPG, 94b9b7168097889.644cc60cc9001.jpg, DSC00062.JPG
+  - Fashion: DSC08417.JPG
+- **Mobile view (Portrait images)**: 15 portrait-oriented images from Fashion/Portraits collection
+- **Random mixing**: Categories randomly interspersed for diverse portfolio showcase (no grouping)
+- **Orientation-based display**: Ensures proper image fit for each device type
+
+### Mobile Navigation Complete Redesign
+- **Final implementation**: Clean, professional mobile hamburger menu
+- **Menu design**:
+  - Solid background (#1a1a1a) - no transparency issues
+  - 260px width (70% max on small screens)
+  - Left-aligned text layout
+  - Pure white text (#ffffff) for maximum readability
+  - Clean borders (#333, #2a2a2a) for visual separation
+- **Backdrop overlay**: 20% opacity dark overlay for subtle effect
+- **Interactions**:
+  - Click hamburger to open/close
+  - Click backdrop to close
+  - Press ESC key to close
+  - Body scroll prevention when menu open
+- **Animations**: Smooth 0.3s slide-in from right with ease-out timing
+- **Active state**: White left border (3px) on current page
+- **Hover effect**: Darker background (#2a2a2a) with subtle left indent
+- **Fixed issues**:
+  - Eliminated double-tap problem (backdrop created on page load)
+  - Removed excessive transparency causing content bleed-through
+  - Fixed spacing gaps between menu items
+  - Improved visibility and contrast
+
+### Technical Improvements
+- **JavaScript enhancements**:
+  - Backdrop element created during initialization (script.js)
+  - Simplified toggle function for reliable operation
+  - ESC key listener for accessibility
+  - Proper z-index management (hamburger: 1003, menu: 1002, backdrop: 1001)
+- **CSS optimization**:
+  - Removed problematic backdrop-filter effects
+  - Solid colors instead of rgba for better performance
+  - Clean, minimal styling for mobile menu
+  - Proper pointer-events handling on backdrop
+
+### Files Modified
+- `index.html` - Hero slideshow (15 slides), thumbnail navigation (15 thumbnails)
+- `styles.css` - Mobile menu redesign, backdrop styling, menu item layout
+- `script.js` - Backdrop initialization, toggle function simplification
+
+### Image Assets
+- Homepage Hero: 15 landscape images (desktop), 15 portrait images (mobile)
+- Sources: Travel (4), Events (6), Products (3), Corporate (3), Fashion (1)
+
+---
+
 ## Version 1.0 - Initial Major Updates (October 4, 2025)
 
 ### Header Enhancements
