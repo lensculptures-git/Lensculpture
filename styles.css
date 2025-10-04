@@ -113,13 +113,13 @@ body {
 
 @media (max-width: 768px) {
     .logo {
-        height: 80px;
+        height: 160px;
     }
 }
 
 @media (max-width: 480px) {
     .logo {
-        height: 60px;
+        height: 120px;
     }
 }
 
