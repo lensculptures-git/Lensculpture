@@ -100,17 +100,14 @@ body {
 
 @media (max-width: 768px) {
     .nav-container {
-        padding: 1rem 1.5rem;
+        padding: 1rem 0.5rem 1rem 1.5rem;
         height: 70px;
+        justify-content: space-between;
     }
 
     .nav-logo {
-        margin-left: -1.5rem;
-        margin-right: auto;
-    }
-
-    .nav-logo img {
         margin-left: 0;
+        padding-left: 0;
     }
 }
 
