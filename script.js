@@ -833,15 +833,21 @@ class StarBirthSystem {
             bloomDelay: { min: 60, max: 40 }, // 60-100ms between star generation
             scatterDuration: 6000, // 6 seconds to scatter when active
             idleDuration: { min: 40000, max: 20000 }, // 40-60 seconds idle drift
-            bloomRadius: 75, // Radius around cursor for star spawn
+            bloomRadius: 75, // Radius around corner for star spawn
         };
 
         // Idle detection for star generation
-        this.mouseX = window.innerWidth / 2;
-        this.mouseY = window.innerHeight / 2;
         this.lastActivityTime = Date.now();
         this.isCurrentlyIdle = false;
         this.isPaused = false; // For page visibility
+
+        // Corner positions for star generation
+        this.corners = [
+            { name: 'top-left', x: 75, y: 75 },
+            { name: 'top-right', x: () => window.innerWidth - 75, y: 75 },
+            { name: 'bottom-left', x: 75, y: () => window.innerHeight - 75 },
+            { name: 'bottom-right', x: () => window.innerWidth - 75, y: () => window.innerHeight - 75 }
+        ];
 
         // Check for reduced motion preference (accessibility)
         this.respectReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -892,16 +898,14 @@ class StarBirthSystem {
         this.lastActivityTime = Date.now();
     }
 
-    updateActivity(x, y) {
-        this.mouseX = x;
-        this.mouseY = y;
+    updateActivity() {
         this.handleActivityDetection();
     }
 
     setupActivityTracking() {
         // Track mouse movement
-        document.addEventListener('mousemove', (e) => {
-            this.updateActivity(e.clientX, e.clientY);
+        document.addEventListener('mousemove', () => {
+            this.handleActivityDetection();
         });
 
         // Track scroll activity
@@ -920,11 +924,9 @@ class StarBirthSystem {
         });
 
         // Track touch movement for mobile
-        document.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 0) {
-                this.updateActivity(e.touches[0].clientX, e.touches[0].clientY);
-            }
-        });
+        document.addEventListener('touchmove', () => {
+            this.handleActivityDetection();
+        }, { passive: true });
 
         // Track mobile taps
         document.addEventListener('touchstart', () => {
@@ -932,24 +934,25 @@ class StarBirthSystem {
         });
     }
 
-    getGalleryBounds() {
-        // Use current mouse position as the center for star generation
-        const bounds = {
-            centerX: this.mouseX,
-            centerY: this.mouseY,
-            radius: this.config.bloomRadius
+    getRandomCornerPosition() {
+        // Randomly select one of the four corners for star generation
+        const corner = this.corners[Math.floor(Math.random() * this.corners.length)];
+        return {
+            centerX: typeof corner.x === 'function' ? corner.x() : corner.x,
+            centerY: typeof corner.y === 'function' ? corner.y() : corner.y,
+            radius: this.config.bloomRadius,
+            name: corner.name
         };
-        return bounds;
     }
 
     generateRandomSpawnPoint() {
-        const bounds = this.getGalleryBounds();
+        const corner = this.getRandomCornerPosition();
         const angle = Math.random() * Math.PI * 2;
-        const distance = Math.random() * bounds.radius; // Stars spawn within radius of cursor
+        const distance = Math.random() * corner.radius; // Stars spawn within radius of corner
 
         return {
-            x: bounds.centerX + Math.cos(angle) * distance,
-            y: bounds.centerY + Math.sin(angle) * distance
+            x: corner.centerX + Math.cos(angle) * distance,
+            y: corner.centerY + Math.sin(angle) * distance
         };
     }
 
