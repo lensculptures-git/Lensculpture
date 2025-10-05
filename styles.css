@@ -1938,6 +1938,39 @@ body {
     color: #e0e0e0;
 }
 
+.email-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.copy-email-btn {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.copy-email-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.05);
+}
+
+.copy-email-btn:active {
+    transform: scale(0.95);
+}
+
+.copy-email-btn svg {
+    display: block;
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .contact-main {

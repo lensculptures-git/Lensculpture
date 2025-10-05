@@ -102,7 +102,15 @@
 
                             <div class="info-item">
                                 <h4>Email</h4>
-                                <p><a href="mailto:contact@lenssculpture.com">contact@lenssculpture.com</a></p>
+                                <p class="email-container">
+                                    <a href="mailto:lensculptures@gmail.com">lensculptures@gmail.com</a>
+                                    <button class="copy-email-btn" onclick="copyEmail()" aria-label="Copy email address">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                        </svg>
+                                    </button>
+                                </p>
                             </div>
 
                             <div class="info-item">
@@ -136,6 +144,25 @@
     <script src="script.js"></script>
     <script src="portfolio.js"></script>
     <script>
+        // Copy email function
+        function copyEmail() {
+            const email = 'lensculptures@gmail.com';
+            navigator.clipboard.writeText(email).then(function() {
+                // Show success feedback
+                const btn = document.querySelector('.copy-email-btn');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                btn.style.color = '#4CAF50';
+
+                setTimeout(function() {
+                    btn.innerHTML = originalHTML;
+                    btn.style.color = '';
+                }, 2000);
+            }).catch(function(err) {
+                alert('Failed to copy email address');
+            });
+        }
+
         // Contact form handling
         document.getElementById('contact-form').addEventListener('submit', function(e) {
             e.preventDefault();
