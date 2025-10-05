@@ -1163,8 +1163,45 @@ body {
     z-index: 1;
 }
 
+/* Animated glow border for interactivity */
+.service-card::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 16px;
+    padding: 2px;
+    background: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.3),
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.3)
+    );
+    background-size: 300% 300%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: glowRotate 4s ease-in-out infinite;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.service-card:hover::after {
+    opacity: 1;
+    animation: glowRotate 2s ease-in-out infinite;
+}
+
 .service-card:hover::before {
     opacity: 1;
+}
+
+@keyframes glowRotate {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
 }
 
 .service-card:hover {
