@@ -1,3 +1,33 @@
+// Page Loader Control
+(function() {
+    const loader = document.getElementById('pageLoader');
+    let isLoaderHidden = false;
+
+    function hideLoader() {
+        if (!isLoaderHidden && loader) {
+            loader.classList.add('hidden');
+            isLoaderHidden = true;
+        }
+    }
+
+    // Hide loader when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            // Small delay to let critical assets render
+            setTimeout(hideLoader, 500);
+        });
+    } else {
+        // DOM already loaded
+        setTimeout(hideLoader, 500);
+    }
+
+    // Force hide after 3 seconds max (fallback)
+    setTimeout(hideLoader, 3000);
+
+    // Hide on window load (all assets including images)
+    window.addEventListener('load', hideLoader);
+})();
+
 // Gallery data structure
 const galleryData = {
     corporate: [

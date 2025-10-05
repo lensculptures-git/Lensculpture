@@ -119,6 +119,123 @@ body {
     overflow-x: hidden;
 }
 
+/* ===== LOADING SCREEN ===== */
+.page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 10, 0.98);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.page-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Camera Aperture Spinner */
+.aperture-loader {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 2rem;
+}
+
+.aperture-blade {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    animation: apertureSpin 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.aperture-blade::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40%;
+    height: 8%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+    transform: translate(-50%, -50%);
+    border-radius: 2px;
+}
+
+.aperture-blade:nth-child(1) { transform: rotate(0deg); }
+.aperture-blade:nth-child(2) { transform: rotate(60deg); }
+.aperture-blade:nth-child(3) { transform: rotate(120deg); }
+.aperture-blade:nth-child(4) { transform: rotate(180deg); }
+.aperture-blade:nth-child(5) { transform: rotate(240deg); }
+.aperture-blade:nth-child(6) { transform: rotate(300deg); }
+
+@keyframes apertureSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Loading Logo */
+.loader-logo {
+    margin-bottom: 1.5rem;
+    animation: logoFadeIn 1s ease-out;
+}
+
+.loader-logo img {
+    height: 100px;
+    width: auto;
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+}
+
+@keyframes logoFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Loading Text */
+.loader-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 300;
+    animation: textPulse 2s ease-in-out infinite;
+}
+
+@keyframes textPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .aperture-loader {
+        width: 60px;
+        height: 60px;
+    }
+
+    .loader-logo img {
+        height: 80px;
+    }
+
+    .loader-text {
+        font-size: 0.75rem;
+        letter-spacing: 1.5px;
+    }
+}
+
 /* Mobile optimizations */
 @media (max-width: 768px) {
     body {
