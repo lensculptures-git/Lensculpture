@@ -375,30 +375,8 @@ function initializePortfolioLightbox() {
     });
 }
 
-// Mobile Navigation for Portfolio Pages
-function initializePortfolioNavigation() {
-    const hamburger = document.querySelector('.hamburger');
-    const navMenu = document.querySelector('.nav-menu');
-
-    if (hamburger && navMenu) {
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
-
-        // Close mobile menu when clicking on links
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-            });
-        });
-    }
-}
-
-// Initialize navigation
-initializePortfolioNavigation();
+// Mobile Navigation is handled by script.js
+// Removed duplicate initializePortfolioNavigation to prevent conflicts
 
 // Update active navigation based on current page
 function updateActiveNavigation() {

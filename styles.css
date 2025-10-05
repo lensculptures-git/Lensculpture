@@ -279,7 +279,10 @@ body {
     background: none;
     border: none;
     padding: 8px;
-    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    pointer-events: auto;
 }
 
 .hamburger span {
