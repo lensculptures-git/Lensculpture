@@ -227,12 +227,11 @@ body {
     }
 
     .loader-logo img {
-        height: 80px;
+        height: 140px;
     }
 
     .loader-text {
-        font-size: 0.75rem;
-        letter-spacing: 1.5px;
+        display: none;
     }
 }
 
