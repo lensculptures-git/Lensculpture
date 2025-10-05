@@ -830,7 +830,8 @@ class StarBirthSystem {
         this.config = {
             maxStars: this.isMobile() ? 50 : 100, // Fewer stars on mobile for performance
             idleThreshold: 10000, // 10 seconds of inactivity before stars bloom
-            bloomDelay: { min: 60, max: 40 }, // 60-100ms between star generation
+            bloomDelay: { min: 60, max: 40 }, // 60-100ms between star generation (idle/bloom)
+            activeDelay: { min: 2000, max: 3000 }, // 2-5 seconds between stars (active/trickle)
             scatterDuration: 6000, // 6 seconds to scatter when active
             idleDuration: { min: 40000, max: 20000 }, // 40-60 seconds idle drift
             bloomRadius: 75, // Radius around corner for star spawn
@@ -1099,15 +1100,17 @@ class StarBirthSystem {
                     const bloomDelay = this.config.bloomDelay.min + Math.random() * this.config.bloomDelay.max;
                     setTimeout(generateStar, bloomDelay);
                 } else {
-                    // User is active (moving mouse or scrolling) - skip stars
+                    // User is active - slow trickle of stars (continuous generation)
                     if (this.isCurrentlyIdle) {
                         this.isCurrentlyIdle = false;
                     }
 
-                    console.log(`Active - ${idleTime}ms since last activity, waiting...`);
+                    console.log(`Active - ${idleTime}ms since last activity, creating trickle star`);
+                    this.createStar();
 
-                    // Check again soon to catch when user becomes idle
-                    setTimeout(generateStar, 100);
+                    // Slow generation while active for continuous ambient effect
+                    const activeDelay = this.config.activeDelay.min + Math.random() * this.config.activeDelay.max;
+                    setTimeout(generateStar, activeDelay);
                 }
             } else if (this.isPaused) {
                 // Tab is hidden, check again later
