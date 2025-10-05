@@ -173,8 +173,8 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(10, 10, 10, 0.75);
-    backdrop-filter: blur(10px);
+    background: rgba(10, 10, 10, 0.4);
+    backdrop-filter: blur(15px);
     z-index: 1000;
     transition: transform 0.3s ease, background 0.3s ease;
 }
@@ -194,18 +194,18 @@ body {
 }
 
 .nav-logo {
-    margin-left: -20px;
+    margin-left: -40px;
 }
 
 @media (max-width: 768px) {
     .nav-container {
-        padding: 1rem 0.5rem 1rem 1.5rem;
+        padding: 1rem 0.5rem 1rem 0.5rem;
         height: 70px;
         justify-content: space-between;
     }
 
     .nav-logo {
-        margin-left: 0;
+        margin-left: -15px;
         padding-left: 0;
     }
 }
