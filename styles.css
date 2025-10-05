@@ -2151,6 +2151,12 @@ body {
         margin-right: -80px;
     }
 
+    .services-grid {
+        grid-template-columns: repeat(5, 1fr);
+        max-width: 1800px;
+        gap: 2.5rem;
+    }
+
     .hero-content h1 {
         font-size: 5rem;
     }
@@ -2198,6 +2204,12 @@ body {
 
     .nav-menu {
         margin-right: -120px;
+    }
+
+    .services-grid {
+        grid-template-columns: repeat(5, 1fr);
+        max-width: 2400px;
+        gap: 3rem;
     }
 
     .about-content {
