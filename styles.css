@@ -187,7 +187,7 @@ body {
 }
 
 .loader-logo img {
-    height: 100px;
+    height: 140px;
     width: auto;
     filter: brightness(0) invert(1);
     opacity: 0.9;
@@ -206,12 +206,7 @@ body {
 
 /* Loading Text */
 .loader-text {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.9rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 300;
-    animation: textPulse 2s ease-in-out infinite;
+    display: none;
 }
 
 @keyframes textPulse {
@@ -224,14 +219,6 @@ body {
     .aperture-loader {
         width: 60px;
         height: 60px;
-    }
-
-    .loader-logo img {
-        height: 140px;
-    }
-
-    .loader-text {
-        display: none;
     }
 }
 
