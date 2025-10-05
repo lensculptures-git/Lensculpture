@@ -8,6 +8,105 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Skip Navigation Link for Accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #ffffff;
+    color: #000000;
+    padding: 12px 24px;
+    text-decoration: none;
+    font-weight: 600;
+    z-index: 10000;
+    border-radius: 0 0 4px 0;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid #0066cc;
+    outline-offset: 2px;
+}
+
+/* Comprehensive Focus Indicators for Accessibility */
+*:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+}
+
+*:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+a:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 4px;
+    text-decoration: underline;
+}
+
+button:focus-visible,
+.cta-button:focus-visible,
+.submit-btn:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+.nav-link:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+}
+
+.hamburger:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.thumbnail:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.5);
+}
+
+.slider-arrow:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.15);
+}
+
+.service-card:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 4px;
+    transform: translateY(-8px) scale(1.02);
+}
+
+.lightbox-close:focus-visible,
+.lightbox-prev:focus-visible,
+.lightbox-next:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: #0a0a0a;
@@ -177,6 +276,10 @@ body {
     display: none;
     flex-direction: column;
     cursor: pointer;
+    background: none;
+    border: none;
+    padding: 8px;
+    outline: none;
 }
 
 .hamburger span {
@@ -185,6 +288,7 @@ body {
     background: #e0e0e0;
     margin: 3px 0;
     transition: 0.3s;
+    display: block;
 }
 
 /* Hero Section */
