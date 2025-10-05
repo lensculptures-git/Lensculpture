@@ -405,8 +405,17 @@ body {
     width: 100%;
     height: 100%;
     opacity: 0;
-    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     transform: scale(1.05);
+    will-change: transform, opacity;
+}
+
+/* Faster transitions for mobile */
+@media (max-width: 768px) {
+    .hero-slide {
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        touch-action: pan-y;
+    }
 }
 
 .hero-slide.active {

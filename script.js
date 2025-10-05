@@ -92,6 +92,8 @@ let currentGallery = [];
 let currentImageIndex = 0;
 let slideInterval;
 let isAutoplay = true;
+let resumeTimer = null;
+let isTransitioning = false;
 
 // Initialize the website
 // Scroll Indicator Functionality
@@ -242,24 +244,36 @@ function initializeHeroSlideshow() {
         }
     });
 
-    // Touch/swipe support
+    // Touch/swipe support with velocity detection
     let touchStartX = 0;
     let touchEndX = 0;
+    let touchStartTime = 0;
+    let touchEndTime = 0;
 
     heroSection.addEventListener('touchstart', (e) => {
         touchStartX = e.changedTouches[0].screenX;
-    });
+        touchStartTime = Date.now();
+    }, { passive: true });
 
     heroSection.addEventListener('touchend', (e) => {
         touchEndX = e.changedTouches[0].screenX;
+        touchEndTime = Date.now();
         handleSwipe();
-    });
+    }, { passive: true });
 
     function handleSwipe() {
-        const swipeThreshold = 50;
-        const diff = touchStartX - touchEndX;
+        // Prevent double-swipes during transition
+        if (isTransitioning) {
+            return;
+        }
 
-        if (Math.abs(diff) > swipeThreshold) {
+        const swipeThreshold = 80; // Increased from 50px to prevent accidental swipes
+        const diff = touchStartX - touchEndX;
+        const swipeTime = touchEndTime - touchStartTime;
+        const swipeVelocity = Math.abs(diff) / swipeTime; // pixels per millisecond
+
+        // Require either: significant distance (80px+) OR fast velocity (>0.5px/ms)
+        if (Math.abs(diff) > swipeThreshold || swipeVelocity > 0.5) {
             if (diff > 0) {
                 nextSlide();
             } else {
@@ -281,6 +295,9 @@ function previousSlide() {
 }
 
 function goToSlide(index) {
+    // Lock transitions to prevent double-swipes
+    isTransitioning = true;
+
     // Remove active classes
     heroSlides.forEach((slide, i) => {
         slide.classList.remove('active', 'prev', 'next');
@@ -306,6 +323,13 @@ function goToSlide(index) {
     currentSlide = index;
     updateSliderDisplay();
     scrollThumbnailIntoView(index);
+
+    // Unlock after transition completes (mobile: 400ms, desktop: 800ms)
+    const isMobile = window.innerWidth <= 768;
+    const transitionDuration = isMobile ? 400 : 800;
+    setTimeout(() => {
+        isTransitioning = false;
+    }, transitionDuration);
 }
 
 function updateSliderDisplay() {
@@ -371,11 +395,18 @@ function pauseAutoplay() {
         autoplayIndicator.classList.remove('active');
     }
 
+    // Clear any existing resume timer to prevent conflicts
+    if (resumeTimer) {
+        clearTimeout(resumeTimer);
+        resumeTimer = null;
+    }
+
     // Resume autoplay after 10 seconds of inactivity
-    setTimeout(() => {
+    resumeTimer = setTimeout(() => {
         if (isAutoplay) {
             startAutoplay();
         }
+        resumeTimer = null;
     }, 10000);
 }
 
