@@ -1078,7 +1078,7 @@ body.products-page .story-hero .parallax-bg::before {
     }
 
     .parallax-divider {
-        height: 40vh;
+        display: none;
     }
 
     .parallax-divider .parallax-bg {
