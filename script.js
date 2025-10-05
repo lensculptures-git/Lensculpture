@@ -1123,6 +1123,72 @@ class StarBirthSystem {
     }
 }
 
+// Progressive Image Loader - Load deferred hero images in batches
+(function() {
+    function loadLazyImages() {
+        const lazyElements = document.querySelectorAll('[data-lazy-load]');
+
+        if (lazyElements.length === 0) return;
+
+        // Load images in batches for better performance
+        const batchSize = 5;
+        let currentBatch = 0;
+
+        function loadBatch() {
+            const start = currentBatch * batchSize;
+            const end = Math.min(start + batchSize, lazyElements.length);
+
+            for (let i = start; i < end; i++) {
+                const element = lazyElements[i];
+
+                // Load desktop and mobile images
+                const desktopImg = element.querySelector('[data-bg-desktop]');
+                const mobileImg = element.querySelector('[data-bg-mobile]');
+
+                if (desktopImg && desktopImg.dataset.bgDesktop) {
+                    desktopImg.style.backgroundImage = `url('${desktopImg.dataset.bgDesktop}')`;
+                    delete desktopImg.dataset.bgDesktop;
+                }
+
+                if (mobileImg && mobileImg.dataset.bgMobile) {
+                    mobileImg.style.backgroundImage = `url('${mobileImg.dataset.bgMobile}')`;
+                    delete mobileImg.dataset.bgMobile;
+                }
+
+                element.removeAttribute('data-lazy-load');
+            }
+
+            currentBatch++;
+
+            // Load next batch if there are more images
+            if (end < lazyElements.length) {
+                // Use requestIdleCallback if available, otherwise setTimeout
+                if ('requestIdleCallback' in window) {
+                    requestIdleCallback(loadBatch);
+                } else {
+                    setTimeout(loadBatch, 100);
+                }
+            }
+        }
+
+        // Start loading after page is fully loaded
+        if (document.readyState === 'complete') {
+            setTimeout(loadBatch, 1000);
+        } else {
+            window.addEventListener('load', () => {
+                setTimeout(loadBatch, 1000);
+            });
+        }
+    }
+
+    // Initialize lazy loading
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadLazyImages);
+    } else {
+        loadLazyImages();
+    }
+})();
+
 // Initialize the star birth system when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Wait a bit for the page to settle, then start the star system
