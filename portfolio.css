@@ -1049,6 +1049,12 @@ body.products-page .story-hero .parallax-bg::before {
         text-align: center;
     }
 
+    /* Reverse order for .reverse sections on mobile - show image first, then text */
+    .story-section.reverse .story-content {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
     .story-text {
         padding: 1rem;
     }
