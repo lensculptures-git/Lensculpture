@@ -1086,8 +1086,12 @@ class StarBirthSystem {
                 const now = Date.now();
                 const idleTime = now - this.lastActivityTime;
 
-                if (idleTime >= this.config.idleThreshold) {
-                    // User is idle - generate stars (blooming effect)
+                // Mobile: Always use slow trickle (no idle bloom for performance)
+                // Desktop: Use idle bloom when idle, trickle when active
+                const useTrickleOnly = this.isMobile();
+
+                if (idleTime >= this.config.idleThreshold && !useTrickleOnly) {
+                    // User is idle - generate stars (blooming effect) - desktop only
                     if (!this.isCurrentlyIdle) {
                         console.log('Transition: Active → Idle - Starting star bloom');
                         this.isCurrentlyIdle = true;
@@ -1101,11 +1105,12 @@ class StarBirthSystem {
                     setTimeout(generateStar, bloomDelay);
                 } else {
                     // User is active - slow trickle of stars (continuous generation)
+                    // Mobile: Always trickle, Desktop: Trickle when active
                     if (this.isCurrentlyIdle) {
                         this.isCurrentlyIdle = false;
                     }
 
-                    console.log(`Active - ${idleTime}ms since last activity, creating trickle star`);
+                    console.log(`${useTrickleOnly ? 'Mobile' : 'Active'} - creating trickle star`);
                     this.createStar();
 
                     // Slow generation while active for continuous ambient effect

@@ -1494,11 +1494,6 @@ body {
         display: block;
     }
 
-    /* Hide desktop star animation on mobile */
-    .star-birth-container {
-        display: none;
-    }
-
     .section-header {
         margin-bottom: 2.5rem;
     }
