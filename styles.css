@@ -2143,6 +2143,14 @@ body {
         max-width: 1800px;
     }
 
+    .nav-logo {
+        margin-left: -180px;
+    }
+
+    .nav-menu {
+        margin-right: -80px;
+    }
+
     .hero-content h1 {
         font-size: 5rem;
     }
@@ -2182,6 +2190,14 @@ body {
 
     .nav-container {
         max-width: 2400px;
+    }
+
+    .nav-logo {
+        margin-left: -280px;
+    }
+
+    .nav-menu {
+        margin-right: -120px;
     }
 
     .about-content {
