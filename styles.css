@@ -11,7 +11,7 @@ html {
 /* Skip Navigation Link for Accessibility */
 .skip-link {
     position: absolute;
-    top: -40px;
+    top: -100px;
     left: 0;
     background: #ffffff;
     color: #000000;
@@ -21,12 +21,16 @@ html {
     z-index: 10000;
     border-radius: 0 0 4px 0;
     transition: top 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .skip-link:focus {
     top: 0;
     outline: 3px solid #0066cc;
     outline-offset: 2px;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* Comprehensive Focus Indicators for Accessibility */
