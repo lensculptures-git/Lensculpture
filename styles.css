@@ -1838,9 +1838,9 @@ body {
         right: -100%;
         top: 70px;
         flex-direction: column;
-        background: linear-gradient(180deg, rgba(15, 15, 15, 0.95) 0%, rgba(20, 20, 25, 0.92) 50%, rgba(15, 15, 20, 0.90) 100%);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        background: rgba(10, 10, 10, 0.4);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
         width: 280px;
         max-width: 75%;
         height: calc(100vh - 70px);
