@@ -1,31 +1,65 @@
-// Page Loader Control
+// Page Loader Control - Smart timing to prevent flash
 (function() {
     const loader = document.getElementById('pageLoader');
+    if (!loader) return;
+
+    // Start with delayed state (invisible)
+    loader.classList.add('delayed');
+
+    // Timing trackers
+    const loadStartTime = Date.now();
+    let loaderShownTime = null;
+    let isPageReady = false;
     let isLoaderHidden = false;
 
+    // Show loader after delay (prevents flash on fast loads)
+    const showDelay = setTimeout(() => {
+        if (!isPageReady && !isLoaderHidden) {
+            loader.classList.remove('delayed');
+            loaderShownTime = Date.now();
+        }
+    }, 300);
+
     function hideLoader() {
-        if (!isLoaderHidden && loader) {
+        if (isLoaderHidden) return;
+
+        isPageReady = true;
+
+        // If loader never shown (fast load), just clear timeout
+        if (loaderShownTime === null) {
+            clearTimeout(showDelay);
+            isLoaderHidden = true;
+            return;
+        }
+
+        // Loader was shown - ensure minimum visibility
+        const loaderVisibleTime = Date.now() - loaderShownTime;
+        const minDisplayTime = 800; // 800ms minimum
+        const remainingTime = Math.max(0, minDisplayTime - loaderVisibleTime);
+
+        setTimeout(() => {
+            loader.classList.add('hidden');
+            isLoaderHidden = true;
+        }, remainingTime);
+    }
+
+    // Hide triggers
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', hideLoader);
+    } else {
+        hideLoader();
+    }
+
+    window.addEventListener('load', hideLoader);
+
+    // Force hide after 3 seconds (fallback)
+    setTimeout(() => {
+        if (!isLoaderHidden) {
+            loader.classList.remove('delayed');
             loader.classList.add('hidden');
             isLoaderHidden = true;
         }
-    }
-
-    // Hide loader when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            // Small delay to let critical assets render
-            setTimeout(hideLoader, 500);
-        });
-    } else {
-        // DOM already loaded
-        setTimeout(hideLoader, 500);
-    }
-
-    // Force hide after 3 seconds max (fallback)
-    setTimeout(hideLoader, 3000);
-
-    // Hide on window load (all assets including images)
-    window.addEventListener('load', hideLoader);
+    }, 3000);
 })();
 
 // Gallery data structure
