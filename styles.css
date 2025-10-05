@@ -189,14 +189,19 @@ body {
     align-items: center;
     padding: 1.2rem 2rem 1.2rem 0;
     max-width: 1400px;
-    margin: 0 auto;
+    margin-left: 0;
+    margin-right: auto;
     height: 80px;
+    overflow: visible;
 }
 
 .nav-logo {
-    margin-left: -80px;
-    padding: 0;
+    margin-left: -90px;
+    padding: 8px;
     overflow: visible;
+    position: relative;
+    background-color: rgba(10, 10, 10, 0.4);
+    border-radius: 4px;
 }
 
 .nav-logo a {
@@ -211,12 +216,16 @@ body {
         padding: 1rem 0.5rem 1rem 0;
         height: 70px;
         justify-content: space-between;
+        overflow: visible;
     }
 
     .nav-logo {
-        margin-left: -30px;
-        padding: 0;
+        margin-left: -15px;
+        padding: 8px;
         overflow: visible;
+        position: relative;
+        background-color: rgba(10, 10, 10, 0.4);
+        border-radius: 4px;
     }
 }
 
