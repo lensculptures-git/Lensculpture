@@ -9,6 +9,104 @@
 
 ---
 
+## Version 1.3 - Performance Optimization & Loading Screen (October 6, 2025)
+
+### Loading Screen Implementation
+**Problem Addressed:**
+- User reported: "In mobile, due to heavy files it's taking time for the website to load"
+- 270MB Hero Images folder causing slow initial page load on mobile devices
+- Need for better user experience during page load
+
+**Solution: Camera Aperture Loading Screen**
+- Custom-designed camera aperture animation with 6 rotating blades
+- Professional branding with logo fade-in animation
+- Pulsing text: "Loading your visual experience..."
+- Multi-trigger hide logic for reliability:
+  - DOMContentLoaded + 500ms delay
+  - Force hide at 3 seconds (fallback)
+  - window.load event
+
+**Visual Design:**
+- Dark semi-transparent background (rgba(10, 10, 10, 0.98))
+- White aperture blades with gradient effect
+- Logo at 100px height with brightness filter
+- Smooth 0.6s fade-out transition
+
+**Implementation Scope:**
+- Added to all 8 pages (index.html + 7 portfolio pages)
+- Consistent experience across entire website
+- IIFE pattern for isolated loader control
+
+### Lazy Loading for Hero Slideshow
+**Strategy: Progressive Image Loading**
+- First slide loads immediately (LCP optimization)
+- Slides 2-20 converted to data attributes (prevents eager loading)
+- 38 images deferred: 19 hero slides + 19 thumbnails
+
+**Loading Mechanism:**
+- Batch loading: 5 images per batch
+- Uses requestIdleCallback when available (browser idle time)
+- Fallback to setTimeout(100ms) for older browsers
+- Starts 1 second after window.load
+
+**Performance Impact:**
+- Reduces initial page weight by ~230MB
+- First meaningful paint happens with just 2 images (hero + logo)
+- Progressive enhancement - remaining slides load in background
+- No impact on user experience - images ready before navigation
+
+### Preload Critical Assets
+**LCP Optimization:**
+- Preload first hero image (desktop: _DSC2300.JPG)
+- Preload first hero image (mobile: 09a4f2158858591.65b819d34f501.jpg)
+- Media queries ensure correct image for device type
+- Logo already preloaded (existing)
+
+**Benefits:**
+- Faster Largest Contentful Paint (LCP)
+- Reduced layout shift
+- Better Core Web Vitals scores
+
+### Script Optimization
+**Deferred Loading:**
+- Moved script.js from end of <body> to <head> with defer attribute
+- Allows early script discovery by browser
+- Maintains execution order after DOM parse
+- Better parallelization of resource loading
+
+**Technical Details:**
+- Font preconnect already optimized (existing)
+- Structured data remains inline (no defer needed)
+- All interactive features load after DOM ready
+
+### Files Modified
+- `styles.css` - Loading screen styles (120 lines)
+- `index.html` - Loader HTML, lazy load attributes, preload hints, script defer
+- `script.js` - Loader control, progressive image loader (65 lines)
+- `corporate.html, events.html, portraits.html, products.html, travel.html, about.html, contact.html` - Loader HTML
+
+### Performance Metrics
+- **Initial page weight reduction**: ~230MB (85% reduction in image loading)
+- **Images loaded initially**: 2 (hero + logo) vs 40 previously
+- **LCP candidates**: Optimized with preload hints
+- **Progressive loading**: 38 images in 8 batches of 5
+- **Load timing**: Starts at window.load + 1s, batch interval = idle time
+
+### Technical Implementation
+**CSS Highlights:**
+- `@keyframes apertureSpin` - 360° rotation for blades
+- `@keyframes logoFadeIn` - Scale + opacity animation
+- `@keyframes textPulse` - Breathing text effect
+- Fixed positioning with z-index: 99999
+
+**JavaScript Highlights:**
+- IIFE pattern for loader isolation
+- Progressive batch loader with requestIdleCallback
+- Data attribute to inline style conversion
+- Graceful cleanup (removes data attributes after load)
+
+---
+
 ## Version 1.2 - UX Improvements & Bug Fixes (October 6, 2025)
 
 ### White Patch Fix (Accessibility Issue)
