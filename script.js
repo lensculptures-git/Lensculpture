@@ -446,8 +446,11 @@ function initializeNavigation() {
         });
     }
 
-    // Update active nav link on scroll
-    window.addEventListener('scroll', updateActiveNavLink, { passive: true });
+    // Update active nav link on scroll (only for homepage with anchor navigation)
+    const isHomePage = window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname === '';
+    if (isHomePage) {
+        window.addEventListener('scroll', updateActiveNavLink, { passive: true });
+    }
 
     // Initialize auto-hide navbar on scroll
     initializeNavbarAutoHide();
