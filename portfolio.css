@@ -1093,6 +1093,7 @@ body.products-page .story-hero .parallax-bg::before {
 
     .gallery-showcase {
         padding: 4rem 0;
+        min-height: auto;
     }
 
     .gallery-showcase h2 {
