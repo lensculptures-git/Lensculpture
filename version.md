@@ -9,6 +9,90 @@
 
 ---
 
+## Version 1.2 - UX Improvements & Bug Fixes (October 6, 2025)
+
+### White Patch Fix (Accessibility Issue)
+- **Problem identified**: White patch appearing in top-left corner of homepage
+- **Root cause**: Accessibility "Skip to main content" link was visible when it shouldn't be
+- **Solution implemented**:
+  - Moved skip link further off-screen (top: -100px from -40px)
+  - Added `opacity: 0` and `pointer-events: none` to completely hide
+  - Maintained full accessibility - link appears on Tab key focus
+  - Added `opacity: 1` and `pointer-events: auto` on focus state
+- **Result**: White patch completely removed while preserving keyboard navigation accessibility
+
+### Mobile Logo Positioning
+- **Adjustment**: Logo moved 15px further left on mobile devices
+- **Updated value**: `margin-left: -45px` (from -30px)
+- **Visual effect**: Better alignment with hamburger menu, improved left-edge positioning
+
+### Mobile Landing Page Slideshow - Major UX Overhaul
+**Performance & Responsiveness:**
+- **Swipe lag eliminated**: Reduced transition from 1.2s to 0.4s on mobile (3x faster response)
+- **Desktop preserved**: Kept 0.8s transition for smooth desktop experience
+- **Optimized transitions**: Changed from `all` to specific `transform, opacity` properties
+- **Hardware acceleration**: Added `will-change: transform, opacity` for GPU rendering
+- **iOS optimization**: Added `touch-action: pan-y` to prevent scroll interference
+
+**Autoplay Logic Fixed:**
+- **Timer conflicts resolved**: Now clears previous resume timer before setting new one
+- **No overlapping timers**: Eliminated confusion from multiple 10-second timers
+- **State tracking**: Added `resumeTimer` variable for clean timer management
+- **Predictable behavior**: Autoplay resumes only when intentionally paused, not on navigation
+
+**Smarter Swipe Detection:**
+- **Threshold increased**: 80px from 50px to prevent accidental swipes
+- **Velocity-based detection**: Added swipe velocity calculation (pixels/millisecond)
+- **Dual trigger system**: Activates on distance (>80px) OR velocity (>0.5px/ms)
+- **Time tracking**: Measures swipe duration for velocity calculation
+- **Natural feel**: Fast swipes trigger with less distance, slow swipes require full distance
+
+**Double-Swipe Prevention:**
+- **Transition locking**: Added `isTransitioning` flag to prevent rapid consecutive swipes
+- **Smart unlock timing**: 400ms lock on mobile, 800ms on desktop (matches transition duration)
+- **Device detection**: Automatically adjusts based on screen width (≤768px = mobile)
+- **Smooth operation**: No jarring interruptions during active transitions
+
+### Navigation Active State - Desktop Fix
+- **Problem**: Active page highlighting removed when scrolling on portfolio pages
+- **Root cause**: `updateActiveNavLink()` scroll listener running on ALL pages
+- **Solution**: Restricted scroll-based active link updates to homepage only
+- **Behavior now**:
+  - Corporate page → "Corporate" stays highlighted throughout scroll
+  - Events page → "Events" stays highlighted throughout scroll
+  - Homepage → Scroll-based highlighting works for anchor navigation
+  - Active state persists until user navigates to different page
+
+### Technical Improvements
+**CSS Enhancements:**
+- Optimized slide transitions for mobile performance
+- Added touch-specific CSS properties for better mobile handling
+- Hardware-accelerated animations via `will-change`
+
+**JavaScript Enhancements:**
+- Added velocity detection algorithm for swipe gestures
+- Implemented transition lock mechanism with device-aware timing
+- Fixed timer cleanup in autoplay pause function
+- Added page detection for conditional scroll listener attachment
+
+**Performance Gains:**
+- 3x faster slide transitions on mobile
+- Eliminated CSS repaints from `all` property transitions
+- GPU-accelerated transforms for smoother animations
+- Passive event listeners for optimized scroll performance
+
+### Files Modified
+- `styles.css` - Skip link visibility, mobile logo positioning, mobile slide transitions, touch optimizations
+- `script.js` - Autoplay timer cleanup, swipe velocity detection, transition locking, navigation scroll listener conditions
+
+### Metrics
+- **Swipe response time**: 1200ms → 400ms (66% reduction)
+- **Swipe threshold**: 50px → 80px (60% increase for accuracy)
+- **Mobile logo position**: -30px → -45px (15px further left)
+- **Transition lock**: Device-aware (400ms mobile, 800ms desktop)
+
+---
+
 ## Version 1.1 - Homepage Hero & Mobile Navigation Redesign (October 5, 2025)
 
 ### Homepage Hero Gallery Update
