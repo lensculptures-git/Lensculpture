@@ -194,7 +194,16 @@ body {
 }
 
 .nav-logo {
-    margin-left: -40px;
+    margin-left: -80px;
+    padding: 0;
+    overflow: visible;
+}
+
+.nav-logo a {
+    display: block;
+    padding: 0;
+    margin: 0;
+    line-height: 0;
 }
 
 @media (max-width: 768px) {
@@ -205,8 +214,9 @@ body {
     }
 
     .nav-logo {
-        margin-left: -15px;
-        padding-left: 0;
+        margin-left: -30px;
+        padding: 0;
+        overflow: visible;
     }
 }
 
@@ -214,6 +224,9 @@ body {
     height: 140px;
     width: auto;
     filter: brightness(0) invert(1);
+    display: block;
+    margin: 0;
+    padding: 0;
 }
 
 @media (max-width: 768px) {
