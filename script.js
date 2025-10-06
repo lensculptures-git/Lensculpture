@@ -374,8 +374,6 @@ function initializeHeroSlideshow() {
             preventScroll: true,
             enabled: true
         });
-
-        console.log('[Hero] Touch gestures registered - Top 60% for swipes, bottom 35% for scroll');
     }
 }
 
@@ -884,24 +882,9 @@ if (window.location.pathname.includes('index.html') || window.location.pathname 
     window.addEventListener('scroll', requestHeroParallaxTick, { passive: true });
 }
 
-// Preload images for better performance
-function preloadImages() {
-    const imageUrls = [];
-
-    Object.values(galleryData).forEach(category => {
-        category.forEach(image => {
-            imageUrls.push(image.src);
-        });
-    });
-
-    imageUrls.forEach(url => {
-        const img = new Image();
-        img.src = url;
-    });
-}
-
-// Initialize image preloading after page load
-window.addEventListener('load', preloadImages);
+// NOTE: Removed aggressive preloadImages() function that was loading all 58 gallery images
+// immediately, causing ~580MB+ memory usage. Gallery images now load on-demand when
+// user navigates to specific gallery pages.
 
 // Dynamic Star Birth System
 class StarBirthSystem {
@@ -911,15 +894,16 @@ class StarBirthSystem {
         this.activeStars = [];
         this.isRunning = false;
 
-        // Configurable parameters - optimized for mobile
+        // Configurable parameters - optimized for performance
+        // Desktop reduced from 100 to 30 stars (maintains full travel distance)
         const isLowEnd = window.performanceMonitor && window.performanceMonitor.isLowEnd();
         this.config = {
-            maxStars: isLowEnd ? 10 : (this.isMobile() ? 20 : 100), // Reduced from 50 to 20 on mobile
+            maxStars: isLowEnd ? 10 : (this.isMobile() ? 20 : 30), // Desktop: 100→30, Mobile: 20, Low-end: 10
             idleThreshold: 10000, // 10 seconds of inactivity before stars bloom
             bloomDelay: { min: 60, max: 40 }, // 60-100ms between star generation (idle/bloom)
             activeDelay: { min: 2000, max: 3000 }, // 2-5 seconds between stars (active/trickle)
             scatterDuration: 6000, // 6 seconds to scatter when active
-            idleDuration: { min: 40000, max: 20000 }, // 40-60 seconds idle drift
+            idleDuration: { min: 40000, max: 20000 }, // 40-60 seconds - stars complete full journey across screen
             bloomRadius: 75, // Radius around corner for star spawn
         };
 
@@ -942,8 +926,6 @@ class StarBirthSystem {
         // Initialize if container exists and motion is allowed
         if (this.container && !this.respectReducedMotion) {
             this.init();
-        } else if (this.respectReducedMotion) {
-            console.log('Star system disabled: user prefers reduced motion');
         }
     }
 
@@ -963,10 +945,8 @@ class StarBirthSystem {
         // Pause star generation when tab is hidden to save resources
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
-                console.log('Tab hidden - pausing star generation');
                 this.isPaused = true;
             } else {
-                console.log('Tab visible - resuming star generation');
                 this.isPaused = false;
                 // Reset activity time to prevent immediate bloom when returning to tab
                 this.lastActivityTime = Date.now();
@@ -978,7 +958,6 @@ class StarBirthSystem {
     handleActivityDetection() {
         // Detect idle → active transition and scatter stars
         if (this.isCurrentlyIdle) {
-            console.log('Transition: Idle → Active - Scattering stars!');
             this.scatterExistingStars();
             this.isCurrentlyIdle = false;
         }
@@ -1023,7 +1002,6 @@ class StarBirthSystem {
                 },
                 enabled: true
             });
-            console.log('[StarBirth] Registered with TouchManager');
         } else {
             // Fallback to direct touch listeners if TouchManager not available
             document.addEventListener('touchmove', () => {
@@ -1060,11 +1038,8 @@ class StarBirthSystem {
 
     createStar() {
         if (this.activeStars.length >= this.config.maxStars) {
-            console.log('Max stars reached, skipping creation');
             return;
         }
-
-        console.log('Creating new star...');
 
         const star = document.createElement('div');
         const starTypes = ['small', 'medium', 'bright'];
@@ -1073,8 +1048,6 @@ class StarBirthSystem {
         star.className = `born-star ${randomType}`;
 
         const spawnPoint = this.generateRandomSpawnPoint();
-        console.log('Spawn point:', spawnPoint);
-
         const angle = Math.random() * Math.PI * 2;
         const speed = 0.1 + Math.random() * 0.3; // Much slower, very graceful movement
 
@@ -1093,17 +1066,11 @@ class StarBirthSystem {
         star.style.zIndex = '2'; // Below portfolio elements
         star.style.position = 'absolute';
 
-        console.log(`Star created at: ${spawnPoint.x}, ${spawnPoint.y} type: ${randomType} element:`, star);
-
         this.container.appendChild(star);
         this.activeStars.push(star);
 
-        console.log('Active stars count:', this.activeStars.length);
-        console.log('Container children count:', this.container.children.length);
-
-        // Simplified animation for debugging
+        // Start animation
         setTimeout(() => {
-            console.log('Starting star animation...');
             this.animateStar(star, spawnPoint, endX, endY, speed);
         }, 100);
     }
@@ -1152,8 +1119,6 @@ class StarBirthSystem {
 
     scatterExistingStars() {
         // Gracefully scatter stars when user becomes active
-        console.log(`Elegantly scattering ${this.activeStars.length} existing stars`);
-
         this.activeStars.forEach(star => {
             if (star.moveAnimation && star.scatterData) {
                 // Cancel current slow animation
@@ -1181,7 +1146,6 @@ class StarBirthSystem {
     }
 
     startStarGeneration() {
-        console.log('Starting star generation with idle detection...');
         const generateStar = () => {
             if (this.isRunning && !this.isPaused) {
                 const now = Date.now();
@@ -1194,11 +1158,9 @@ class StarBirthSystem {
                 if (idleTime >= this.config.idleThreshold && !useTrickleOnly) {
                     // User is idle - generate stars (blooming effect) - desktop only
                     if (!this.isCurrentlyIdle) {
-                        console.log('Transition: Active → Idle - Starting star bloom');
                         this.isCurrentlyIdle = true;
                     }
 
-                    console.log(`Idle for ${idleTime}ms - Creating star`);
                     this.createStar();
 
                     // Fast generation while idle for blooming effect
@@ -1211,7 +1173,6 @@ class StarBirthSystem {
                         this.isCurrentlyIdle = false;
                     }
 
-                    console.log(`${useTrickleOnly ? 'Mobile' : 'Active'} - creating trickle star`);
                     this.createStar();
 
                     // Slow generation while active for continuous ambient effect
@@ -1221,8 +1182,6 @@ class StarBirthSystem {
             } else if (this.isPaused) {
                 // Tab is hidden, check again later
                 setTimeout(generateStar, 1000);
-            } else {
-                console.log('Star generation stopped');
             }
         };
 
@@ -1305,15 +1264,10 @@ class StarBirthSystem {
 document.addEventListener('DOMContentLoaded', () => {
     // Wait a bit for the page to settle, then start the star system
     setTimeout(() => {
-        console.log('Initializing Star Birth System...');
         const container = document.getElementById('starBirthContainer');
-        console.log('Container found:', !!container);
 
         if (container) {
             window.starBirthSystem = new StarBirthSystem();
-            console.log('Star Birth System initialized on all pages');
-        } else {
-            console.error('Star container not found');
         }
     }, 1000); // Reduced delay since we don't need to wait for services-grid
 });

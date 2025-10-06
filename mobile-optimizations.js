@@ -29,7 +29,6 @@ class ScrollLockManager {
                 // First lock - save original state and lock
                 this.originalOverflow = document.body.style.overflow;
                 document.body.style.overflow = 'hidden';
-                console.log(`[ScrollLock] Locked by: ${requester}`);
             }
 
             // Safety: Auto-unlock after 30 seconds to prevent permanent locks
@@ -50,7 +49,6 @@ class ScrollLockManager {
                 // No more locks - restore scroll
                 this.lockCount = 0;
                 document.body.style.overflow = this.originalOverflow || '';
-                console.log(`[ScrollLock] Unlocked by: ${requester}`);
                 this.clearAutoUnlock();
             }
         }
@@ -60,7 +58,6 @@ class ScrollLockManager {
      * Force unlock all (emergency use only)
      */
     forceUnlock() {
-        console.warn('[ScrollLock] Force unlocking all!');
         this.locks.clear();
         this.lockCount = 0;
         document.body.style.overflow = this.originalOverflow || '';
@@ -74,7 +71,6 @@ class ScrollLockManager {
         this.clearAutoUnlock();
         this.autoUnlockTimer = setTimeout(() => {
             if (this.lockCount > 0) {
-                console.warn('[ScrollLock] Auto-unlocking after 30s');
                 this.forceUnlock();
             }
         }, 30000);
@@ -148,7 +144,6 @@ class TouchManager {
         };
 
         this.activeZones.set(id, { ...defaultOptions, ...options });
-        console.log(`[TouchManager] Registered zone: ${id}`);
     }
 
     /**
@@ -157,7 +152,6 @@ class TouchManager {
      */
     unregisterZone(id) {
         this.activeZones.delete(id);
-        console.log(`[TouchManager] Unregistered zone: ${id}`);
     }
 
     /**
@@ -169,7 +163,6 @@ class TouchManager {
         const zone = this.activeZones.get(id);
         if (zone) {
             zone.enabled = enabled;
-            console.log(`[TouchManager] Zone ${id}: ${enabled ? 'enabled' : 'disabled'}`);
         }
     }
 
@@ -180,7 +173,6 @@ class TouchManager {
         document.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false });
         document.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
         document.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: false });
-        console.log('[TouchManager] Initialized');
     }
 
     /**
@@ -381,11 +373,8 @@ class PerformanceMonitor {
                     this.fpsHistory.shift();
                 }
 
-                // Warn if consistently low FPS
+                // Track average FPS
                 const avgFPS = this.fpsHistory.reduce((a, b) => a + b, 0) / this.fpsHistory.length;
-                if (avgFPS < 30 && this.fpsHistory.length >= 5) {
-                    console.warn(`[Performance] Low FPS detected: ${avgFPS.toFixed(1)}`);
-                }
 
                 this.frameCount = 0;
                 this.lastFrameTime = currentTime;
@@ -445,10 +434,8 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         window.touchManager.init();
         window.performanceMonitor.startMonitoring();
-        console.log('[Mobile Optimizations] Initialized');
     });
 } else {
     window.touchManager.init();
     window.performanceMonitor.startMonitoring();
-    console.log('[Mobile Optimizations] Initialized');
 }
