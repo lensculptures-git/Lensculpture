@@ -308,43 +308,39 @@ function initializeHeroSlideshow() {
         }
     });
 
-    // Touch/swipe support with velocity detection
-    let touchStartX = 0;
-    let touchEndX = 0;
-    let touchStartTime = 0;
-    let touchEndTime = 0;
+    // Register hero section with TouchManager for better swipe handling
+    if (window.touchManager && heroSection) {
+        // Calculate center 80% of screen for swipe zone (avoid conflicts with thumbnails)
+        const screenHeight = window.innerHeight;
+        const swipeZoneTop = screenHeight * 0.1; // Top 10% excluded
+        const swipeZoneHeight = screenHeight * 0.7; // Middle 70%
 
-    heroSection.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-        touchStartTime = Date.now();
-    }, { passive: true });
+        window.touchManager.registerZone('hero-swipe', {
+            element: heroSection,
+            priority: 10,
+            zone: {
+                top: swipeZoneTop,
+                left: 0,
+                width: window.innerWidth,
+                height: swipeZoneHeight
+            },
+            onSwipeLeft: (e, data) => {
+                if (!isTransitioning) {
+                    nextSlide();
+                    pauseAutoplay();
+                }
+            },
+            onSwipeRight: (e, data) => {
+                if (!isTransitioning) {
+                    previousSlide();
+                    pauseAutoplay();
+                }
+            },
+            preventScroll: true,
+            enabled: true
+        });
 
-    heroSection.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        touchEndTime = Date.now();
-        handleSwipe();
-    }, { passive: true });
-
-    function handleSwipe() {
-        // Prevent double-swipes during transition
-        if (isTransitioning) {
-            return;
-        }
-
-        const swipeThreshold = 80; // Increased from 50px to prevent accidental swipes
-        const diff = touchStartX - touchEndX;
-        const swipeTime = touchEndTime - touchStartTime;
-        const swipeVelocity = Math.abs(diff) / swipeTime; // pixels per millisecond
-
-        // Require either: significant distance (80px+) OR fast velocity (>0.5px/ms)
-        if (Math.abs(diff) > swipeThreshold || swipeVelocity > 0.5) {
-            if (diff > 0) {
-                nextSlide();
-            } else {
-                previousSlide();
-            }
-            pauseAutoplay();
-        }
+        console.log('[Hero] Touch gestures registered with TouchManager');
     }
 }
 
@@ -526,11 +522,23 @@ function toggleMobileMenu() {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
 
-    // Prevent body scroll when menu is open
+    // Use ScrollLockManager to prevent conflicts
     if (navMenu.classList.contains('active')) {
-        document.body.style.overflow = 'hidden';
+        if (window.scrollLockManager) {
+            window.scrollLockManager.lock('mobile-menu');
+        }
+        // Notify touch manager
+        if (window.touchManager) {
+            window.touchManager.setMenuOpen(true);
+        }
     } else {
-        document.body.style.overflow = '';
+        if (window.scrollLockManager) {
+            window.scrollLockManager.unlock('mobile-menu');
+        }
+        // Notify touch manager
+        if (window.touchManager) {
+            window.touchManager.setMenuOpen(false);
+        }
     }
 }
 
@@ -701,12 +709,20 @@ function openLightbox(category, index) {
     currentImageIndex = index;
     updateLightboxImage();
     lightbox.style.display = 'block';
-    document.body.style.overflow = 'hidden';
+
+    // Use ScrollLockManager
+    if (window.scrollLockManager) {
+        window.scrollLockManager.lock('lightbox');
+    }
 }
 
 function closeLightbox() {
     lightbox.style.display = 'none';
-    document.body.style.overflow = 'auto';
+
+    // Use ScrollLockManager
+    if (window.scrollLockManager) {
+        window.scrollLockManager.unlock('lightbox');
+    }
 }
 
 function showPreviousImage() {
@@ -860,9 +876,10 @@ class StarBirthSystem {
         this.activeStars = [];
         this.isRunning = false;
 
-        // Configurable parameters
+        // Configurable parameters - optimized for mobile
+        const isLowEnd = window.performanceMonitor && window.performanceMonitor.isLowEnd();
         this.config = {
-            maxStars: this.isMobile() ? 50 : 100, // Fewer stars on mobile for performance
+            maxStars: isLowEnd ? 10 : (this.isMobile() ? 20 : 100), // Reduced from 50 to 20 on mobile
             idleThreshold: 10000, // 10 seconds of inactivity before stars bloom
             bloomDelay: { min: 60, max: 40 }, // 60-100ms between star generation (idle/bloom)
             activeDelay: { min: 2000, max: 3000 }, // 2-5 seconds between stars (active/trickle)
@@ -958,15 +975,30 @@ class StarBirthSystem {
             this.handleActivityDetection();
         });
 
-        // Track touch movement for mobile
-        document.addEventListener('touchmove', () => {
-            this.handleActivityDetection();
-        }, { passive: true });
+        // Register with TouchManager for touch tracking (if available)
+        if (window.touchManager) {
+            window.touchManager.registerZone('star-birth', {
+                element: document.body,
+                priority: 1, // Low priority - don't interfere with other interactions
+                onTouchStart: () => {
+                    this.handleActivityDetection();
+                },
+                onTouchEnd: () => {
+                    this.handleActivityDetection();
+                },
+                enabled: true
+            });
+            console.log('[StarBirth] Registered with TouchManager');
+        } else {
+            // Fallback to direct touch listeners if TouchManager not available
+            document.addEventListener('touchmove', () => {
+                this.handleActivityDetection();
+            }, { passive: true });
 
-        // Track mobile taps
-        document.addEventListener('touchstart', () => {
-            this.handleActivityDetection();
-        });
+            document.addEventListener('touchstart', () => {
+                this.handleActivityDetection();
+            });
+        }
     }
 
     getRandomCornerPosition() {

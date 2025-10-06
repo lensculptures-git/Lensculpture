@@ -252,6 +252,13 @@ body {
         min-height: 44px;
         min-width: 44px;
         -webkit-tap-highlight-color: transparent;
+        transition: transform 0.1s ease, opacity 0.1s ease;
+    }
+
+    /* Touch feedback - scale down on tap */
+    button:active, .nav-link:active, .thumbnail:active {
+        transform: scale(0.95);
+        opacity: 0.8;
     }
 
     .nav-link {
@@ -527,11 +534,12 @@ body {
     will-change: transform, opacity;
 }
 
-/* Faster transitions for mobile */
+/* Faster transitions for mobile with hardware acceleration */
 @media (max-width: 768px) {
     .hero-slide {
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        touch-action: pan-y;
+        touch-action: pan-x; /* Changed from pan-y to allow horizontal swipes */
+        transform: translate3d(0, 0, 0); /* Force GPU acceleration */
     }
 }
 
@@ -682,6 +690,8 @@ body {
     border: 1px solid transparent;
     position: relative;
     overflow: hidden;
+    transform: translate3d(0, 0, 0); /* Hardware acceleration */
+    will-change: transform, opacity;
 }
 
 /* Responsive Thumbnails */
@@ -844,8 +854,9 @@ body {
     }
 
     .thumbnail {
-        width: 40px;
-        height: 26px;
+        width: 44px; /* Increased from 40px to meet minimum touch target size */
+        height: 30px; /* Increased from 26px */
+        padding: 2px; /* Add padding to make tap area larger */
     }
 
     .slider-arrows {
@@ -880,9 +891,10 @@ body {
     }
 
     .thumbnail {
-        width: 32px;
-        height: 22px;
+        width: 44px; /* Increased from 32px to meet minimum touch target */
+        height: 28px; /* Increased from 22px */
         border-radius: 3px;
+        padding: 2px;
     }
 
     .slider-info {
@@ -1833,14 +1845,21 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    /* Optimize navbar for mobile performance */
+    .navbar {
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(8px); /* Reduced from 15px for better performance */
+        -webkit-backdrop-filter: blur(8px);
+    }
+
     .nav-menu {
         position: fixed;
         right: -100%;
         top: 70px;
         flex-direction: column;
-        background: rgba(10, 10, 10, 0.4);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
+        background: rgba(10, 10, 10, 0.95); /* More opaque for better performance */
+        backdrop-filter: blur(10px); /* Reduced from 15px */
+        -webkit-backdrop-filter: blur(10px);
         width: 280px;
         max-width: 64%;
         height: calc(100vh - 70px);
@@ -1853,6 +1872,8 @@ body {
         border-left: 1px solid rgba(255, 255, 255, 0.08);
         pointer-events: auto;
         opacity: 0;
+        transform: translate3d(0, 0, 0); /* Hardware acceleration */
+        will-change: transform, opacity;
     }
 
     .nav-menu.active {
