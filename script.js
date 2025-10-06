@@ -190,6 +190,38 @@ function initializeScrollIndicator() {
     });
 }
 
+// Pull-up Indicator Functionality (Mobile)
+function initializePullUpIndicator() {
+    const pullUpIndicator = document.getElementById('pullUpIndicator');
+    if (!pullUpIndicator) return;
+
+    let scrolled = false;
+
+    // Hide indicator on scroll
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50 && !scrolled) {
+            scrolled = true;
+            pullUpIndicator.style.opacity = '0';
+            pullUpIndicator.style.pointerEvents = 'none';
+        } else if (window.scrollY <= 50 && scrolled) {
+            scrolled = false;
+            pullUpIndicator.style.opacity = '0.8';
+            pullUpIndicator.style.pointerEvents = 'auto';
+        }
+    }, { passive: true });
+
+    // Smooth scroll on click
+    pullUpIndicator.addEventListener('click', () => {
+        const portfolioSection = document.getElementById('portfolio-offerings');
+        if (portfolioSection) {
+            portfolioSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+}
+
 // Services Grid Functionality
 function initializeServicesGrid() {
     const serviceCards = document.querySelectorAll('.service-card');
@@ -233,6 +265,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize scroll indicator
     initializeScrollIndicator();
+
+    // Initialize pull-up indicator (mobile)
+    initializePullUpIndicator();
 
     initializeHeroSlideshow();
     initializeNavigation();
@@ -310,10 +345,10 @@ function initializeHeroSlideshow() {
 
     // Register hero section with TouchManager for better swipe handling
     if (window.touchManager && heroSection) {
-        // Calculate center 80% of screen for swipe zone (avoid conflicts with thumbnails)
+        // Calculate center zone for swipe - leave bottom 35% for scrolling
         const screenHeight = window.innerHeight;
-        const swipeZoneTop = screenHeight * 0.1; // Top 10% excluded
-        const swipeZoneHeight = screenHeight * 0.7; // Middle 70%
+        const swipeZoneTop = screenHeight * 0.05; // Top 5% excluded
+        const swipeZoneHeight = screenHeight * 0.60; // Top 60% for swipes, bottom 35% for scroll
 
         window.touchManager.registerZone('hero-swipe', {
             element: heroSection,
@@ -340,7 +375,7 @@ function initializeHeroSlideshow() {
             enabled: true
         });
 
-        console.log('[Hero] Touch gestures registered with TouchManager');
+        console.log('[Hero] Touch gestures registered - Top 60% for swipes, bottom 35% for scroll');
     }
 }
 
@@ -384,9 +419,9 @@ function goToSlide(index) {
     updateSliderDisplay();
     scrollThumbnailIntoView(index);
 
-    // Unlock after transition completes (mobile: 400ms, desktop: 800ms)
+    // Unlock after transition completes (mobile: 300ms, desktop: 800ms)
     const isMobile = window.innerWidth <= 768;
-    const transitionDuration = isMobile ? 400 : 800;
+    const transitionDuration = isMobile ? 300 : 800;
     setTimeout(() => {
         isTransitioning = false;
     }, transitionDuration);

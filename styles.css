@@ -511,8 +511,7 @@ body {
 
 @media (max-width: 768px) {
     .scroll-indicator {
-        right: 20px;
-        bottom: 30px;
+        display: none; /* Hide old scroll indicator on mobile */
     }
 }
 
@@ -537,9 +536,11 @@ body {
 /* Faster transitions for mobile with hardware acceleration */
 @media (max-width: 768px) {
     .hero-slide {
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.3s ease-out; /* Faster, snappier */
         touch-action: pan-x; /* Changed from pan-y to allow horizontal swipes */
         transform: translate3d(0, 0, 0); /* Force GPU acceleration */
+        backface-visibility: hidden; /* Prevent flickering */
+        -webkit-backface-visibility: hidden;
     }
 }
 
@@ -633,6 +634,54 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
+    position: relative;
+}
+
+/* Pull-up scroll indicator (mobile only) */
+.pull-up-indicator {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.pull-up-indicator:hover {
+    opacity: 1;
+}
+
+.pull-up-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+.pull-up-arrow {
+    width: 24px;
+    height: 24px;
+    color: rgba(255, 255, 255, 0.9);
+    animation: pullUpBounce 2s ease-in-out infinite;
+}
+
+@keyframes pullUpBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* Show pull-up indicator on mobile */
+@media (max-width: 768px) {
+    .pull-up-indicator {
+        display: flex;
+    }
 }
 
 /* Progress Bar */
